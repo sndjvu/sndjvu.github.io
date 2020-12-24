@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DjVu Reference</title>
+<style>.filename { font-family: sans-serif; }</style>
+</head>
+<body>
+<h1>DjVu Reference</h1>
+
+<section id="13">
+<h2>13 Appendix 4: BZZ coding</h2>
+<p>Numerous streams in the DjVu file format are compressed using the general-purpose compressor described here called “BZZ”. BZZ transforms the input data using the well-documented Burrows–Wheeler transform. However, the traditional “Move To Front” permutation table is augmented with a frequency estimation provided by the Z&prime;-Coder.</p>
+<p>See also file <span class="filename">BSByteStream.cpp</span>.</p>
+
+<section id="13.1">
+<h3>13.1 Encoding</h3>
+<p>BZZ first takes as input a 24-bit integer as block size between 10K and 4M and an input stream (to be compressed). The stream is partitioned into blocks terminated with a special <code>&langle;EOB&rangle;</code> symbol. It is then transformed using the well-documented Burrows–Wheeler (BW or “block sorting”) transform. Then, one block at a time, the block size and resulting output stream are passed as input to be compressed using the Z&prime;-Coder (<a href="#12">Appendix 3</a>).</p>
+</section><!-- 13.1 -->
+
+<section id="13.2">
+<h3>13.2 Decoding</h3>
+<p>We describe the decoding algorithm by means of pseudo-code.</p>
+
+<section id="13.2.1">
+<h4>13.2.1 Decoding pseudo-code</h4>
+<!-- TODO -->
+</section><!-- 13.2.1 -->
+
+<section id="13.2.2">
+<h4>13.2.2 Notes</h4>
+
+<section id="13.2.2.1">
+<h5>13.2.2.1 Overview of decoding a block</h5>
+<p>For each block, one must decode</p>
+<ul>
+<li>the block size (with <code>decode_raw</code>)</li>
+<li>the estimation speed <code>FSHIFT=0,1,2</code> (two bits with the passthrough decoder)</li>
+<li>the sequence of symbols representing the Burrows–Wheeler transform of the block. At this point, the sequence of symbols is logically encoded as a sequence of numbers representing the position of each symbol in the MTF array.</li>
+</ul>
+<p>Then one must perform the inverse Burrows–Wheeler transform to recover the decoded block.</p>
+<p>The following points are significant when recovering the BWT and are discussed below:</p>
+<ul>
+<li>The MTF array is reordered after decoding each number.</li>
+<li>The numbers themselves are arithmetically encoded.</li>
+</ul>
+</section><!-- 13.2.2.1 -->
+
+<section id="13.2.2.2">
+<h5>13.2.2.2 MTF array reordering</h5>
+<p>The MTF array contains 256 bytes initialized with the identity mapping, that is <code>MTF[0] = 0, MTF[1] = 1, ... , MTF[255] = 255</code>.</p>
+<p>Whenever one decodes a number <code>MTFNO</code>, the corresponding symbol to store in the Burrows–Wheeler buffer is <code>MTF[MTFNO]</code> (except for the <code>&langle;EOB&rangle;</code> symbol — see §<a href="#13.2.2.3">13.2.2.3</a>) and the contents of the MTF array are rotated. The rotation moves the symbol that was at position <code>MTF[MTFNO]</code> to a position <code>M</code> that can be 0, 1, 2, or 3. Meanwhile the symbols <code>MTF[M]</code> to <code>MTF[MTFNO - 1]</code> are moved to positions <code>M + 1</code> to <code>MTFNO</code>.</p>
+<p>The position <code>M</code> is chosen using an estimate of the frequency of the symbol <code>MTF[MTFNO]</code>. One strives to position the most frequent symbols at the beginning of the MTF array. To that end, one maintains an array <code>FREQ[0..3]</code> that contains numbers representative of the instantaneous frequencies of the symbols <code>MTF[0..3]</code>.</p>
+<p>Of course this array must also be “rotated” when the rotation of the MTF array affects its first four elements.</p>
+<p>Consider the frequency
+<math>
+  <mi>F</mi>
+  <mo stretchy="false" form="prefix">(</mo>
+  <mi>T</mi>
+  <mo stretchy="false" form="postfix">)</mo>
+</math>
+of a particular symbol
+<math>
+  <mi>S</mi>
+</math>
+measured after decoding the
+<math>
+<mi>T</mi>
+</math>th
+symbol. Ideally,
+<math display="block">
+  <mrow>
+    <mi>F</mi>
+    <mo stretchy="false" form="prefix">(</mo>
+    <mi>T</mi>
+    <mo stretchy="false" form="postfix">)</mo>
+    <mo>=</mo>
+    <mi>λ</mi>
+    <mi>F</mi>
+    <mo stretchy="false" form="prefix">(</mo>
+    <mi>T</mi>
+    <mo>−</mo>
+    <mn>1</mn>
+    <mo stretchy="false" form="postfix">)</mo>
+    <mo>+</mo>
+    <mi>D</mi>
+  </mrow>
+</math>
+where</p>
+<ul>
+<li>
+<math>
+  <mrow>
+    <mn>0</mn>
+    <mo>&lt;</mo>
+    <mi>λ</mi>
+    <mo>≤</mo>
+    <mn>1</mn>
+  </mrow>
+</math>.
+This models how quickly one forgets past information, and
+</li>
+<li>
+<math>
+  <mrow>
+    <mi>D</mi>
+    <mo>=</mo>
+    <mn>1</mn>
+  </mrow>
+</math>
+if the <math><mi>T</mi></math>th symbol is <math><mi>S</mi></math>, and
+<math>
+  <mrow>
+    <mi>D</mi>
+    <mo>=</mo>
+    <mn>0</mn>
+  </mrow>
+</math>
+otherwise. This allows
+<math>
+  <mi>F</mi>
+  <mo stretchy="false" form="prefix">(</mo>
+  <mi>T</mi>
+  <mo stretchy="false" form="postfix">)</mo>
+</math>
+to grow each time the symbol <math><mi>S</mi></math> occurs.
+</li>
+</ul>
+<p>To avoid multiplying all the frequencies by <math><mi>λ</mi></math>, the <code>FREQ</code> array contains instead
+<math display="block">
+  <mrow>
+    <mi>G</mi>
+    <mo stretchy="false" form="prefix">(</mo>
+    <mi>T</mi>
+    <mo stretchy="false" form="postfix">)</mo>
+    <mo>=</mo>
+    <mi>F</mi>
+    <mo stretchy="false" form="prefix">(</mo>
+    <mi>T</mi>
+    <mo stretchy="false" form="postfix">)</mo>
+    <mi>/</mi>
+    <msup>
+      <mi>λ</mi>
+      <mi>T</mi>
+    </msup>
+  </mrow>
+</math>
+It is then easy to see that
+<math display="block">
+  <mrow>
+    <mi>G</mi>
+    <mo stretchy="false" form="prefix">(</mo>
+    <mi>T</mi>
+    <mo stretchy="false" form="postfix">)</mo>
+    <mo>=</mo>
+    <mi>G</mi>
+    <mo stretchy="false" form="prefix">(</mo>
+    <mi>T</mi>
+    <mo>−</mo>
+    <mn>1</mn>
+    <mo stretchy="false" form="postfix">)</mo>
+    <mo>+</mo>
+    <mi>D</mi>
+    <mi>/</mi>
+    <msup>
+      <mi>λ</mi>
+      <mi>T</mi>
+    </msup>
+  </mrow>
+</math>
+Therefore we only need to update the <math><mi>G</mi></math> corresponding to the symbol being decoded (i.e.&nbsp;<math>
+  <mrow>
+    <mi>D</mi>
+    <mo>=</mo>
+    <mn>1</mn>
+  </mrow>
+</math>),
+since the <math><mi>G</mi></math> for the other symbols does not change.</p>
+<p>A dedicated variable <code>FADD</code> contains
+<math>
+  <mrow>
+    <msup>
+      <mi>λ</mi>
+      <mi>T</mi>
+    </msup>
+  </mrow>
+</math>.
+Before each rotation we divide <code>FADD</code> by 
+<math>
+  <mrow>
+    <msup>
+      <mi>λ</mi>
+      <mi>T</mi>
+    </msup>
+  </mrow>
+</math>.
+This is accomplished by the line
+<pre>
+<code>FADD = FADD + SHIFTRIGHT(FADD, FSHIFT)</code>
+</pre>
+<p>The values 0, 1 or 2 of variable <code>FSHIFT</code> correspond to
+<math>
+  <mrow>
+    <mi>λ</mi>
+    <mo>=</mo>
+    <mn>1</mn>
+    <mi>/</mi>
+    <mn>2</mn>
+  </mrow>
+</math>,
+<math><mn>2</mn><mi>/</mi><mn>3</mn></math>, or
+<math><mn>4</mn><mi>/</mi><mn>5</mn></math>.
+To avoid overflows we divide everything (<code>FADD</code> and <code>FREQ[0..3]</code>) by <code>0x10000000</code> whenever <code>FADD</code> becomes bigger than <code>0x10000000</code>. This happens rarely enough to take very little time.</p>
+<p>The
+<math>
+  <mi>G</mi>
+  <mo stretchy="false" form="prefix">(</mo>
+  <mi>T</mi>
+  <mo stretchy="false" form="postfix">)</mo>
+</math>
+of the freshly decoded symbol is therefore
+<math>
+  <mrow>
+    <mi>G</mi>
+    <mo stretchy="false" form="prefix">(</mo>
+    <mi>T</mi>
+    <mo>−</mo>
+    <mn>1</mn>
+    <mo stretchy="false" form="postfix">)</mo>
+    <mo>+</mo>
+  </mrow>
+</math><code>FADD</code>.
+We can only compute this exactly when <math><mi>S</mi></math> is one of the first four symbols of the MTF because we only store <code>FREQ[0..3]</code>. If the decoded number <code>MTFNO</code> is greater than 3, we assume that 
+<math>
+  <mrow>
+    <mi>G</mi>
+    <mo stretchy="false" form="prefix">(</mo>
+    <mi>T</mi>
+    <mo>−</mo>
+    <mn>1</mn>
+    <mo stretchy="false" form="postfix">)</mo>
+    <mo>=</mo>
+    <mn>0</mn>
+  </mrow>
+</math>
+and simply consider 
+<math>
+  <mrow>
+    <mi>G</mi>
+    <mo stretchy="false" form="prefix">(</mo>
+    <mi>T</mi>
+    <mo stretchy="false" form="postfix">)</mo>
+    <mo>=</mo>
+  </mrow>
+</math><code>FADD</code>.</p>
+<p>The number <code>M</code> is then chosen to make sure the array <code>FREQ</code> remains sorted in decreasing order after the rotation.</p>
+</section><!-- 13.2.2.2 -->
+
+<section id="13.2.2.3">
+<h5>13.2.2.3 Decoding the number <code>MTFNO</code></h5>
+<p>Now we can discuss how the numbers <code>MTFNO</code> are stored. There are 262 arithmetic coding contexts. These are initialized to zero at the beginning of the stream decoding process. They should <em>not</em> be reset to zero at the beginning of the block decoding process.</p>
+<p>Because the most frequently used symbols should appear near the front of the array, we expect small values for <code>MTFNO</code> (the index into the MTF array). By design, the number of bits and the number of contexts required to decode increases for larger values of <code>MTFNO</code>:</p>
+<ul>
+<li>A first bit is decoded using context 0, 1 or 2.</li>
+<li>Context 0 or 1 is used if the previous <code>MTFNO</code> was 0 or 1. Otherwise context 2 is used. If this bit is set, the new <code>MTFNO</code> is 0.</li>
+<li>Otherwise a second bit is decoded using context 3, 4 or 5. Context 3 or 4 is used if the previous <code>MTFNO</code> was 0 or 1. Otherwise context 5 is used. If this bit is set, the new <code>MTFNO</code> is 1.</li>
+<li>Otherwise a third bit is decoded using context 6. If this bit is set, the new <code>MTFNO</code> is obtained by adding 2 to a 1-bit number decoded with <code>decode_bin</code> using context 7.</li>
+<li>Otherwise a fourth bit is decoded using context 8. If this bit is set, the new <code>MTFNO</code> is obtained by adding 4 to a 2-bit number decoded with <code>decode_bin</code> using contexts <code>9..11</code>.</li>
+<li>And so forth until…</li>
+<li>Otherwise a ninth bit is decoded using context 132. If this bit is set, the new <code>MTFNO</code> is obtained by adding 128 to a 7-bit number decoded with <code>decode_bin</code> using contexts <code>133..261</code>.</li>
+<li>Otherwise the next symbol is the <code>&langle;EOB&rangle;</code> symbol. Since there is only one <code>&langle;EOB&rangle;</code> symbol, we store a zero in the Burrows–Wheeler buffer and record its position in variable <code>MARKERPOS</code>.</li>
+</ul>
+</section><!-- 13.2.2.3 -->
+
+<section id="13.2.2.4">
+<h5>13.2.2.4 Inverse Burrows–Wheeler transform</h5>
+<p>After decoding the <code>BLOCKSIZE</code> symbols composing the Burrows–Wheeler buffer, we need to perform the inverse Burrows–Wheeler transform to recover the <code>BLOCKSIZE - 1</code> decoded bytes followed by the <code>&langle;EOB&rangle;</code> symbol.</p>
+<p>To start, we</p>
+<ul>
+<li>copy the buffer into an array <code>POSC[0..BLOCKSIZE - 1]</code>,</li>
+<li>prepare an array <code>COUNT[0..255]</code> that counts how many occurrences of each symbol are found,</li>
+<li>prepare an array <code>POSN[0..BLOCKSIZE - 1]</code> that indicates the rank of each occurrence of a symbol in the buffer.</li>
+</ul>
+<p>Imagine that we are sorting the buffer in symbol order (<code>&langle;EOB&rangle;</code> being the smallest symbol). The buffer would be composed of a single <code>&langle;EOB&rangle;</code>, followed by a run of <code>COUNT[0]</code> symbols 0, followed by a run of <code>COUNT[1]</code> symbols 1, etc.</p>
+<p>Using the <code>COUNT</code> array, we compute the position <code>SORTEDPOS[0..255]</code> of each run of symbol in this array.</p>
+<p>To perform the inverse Burrows–Wheeler transform, it is now sufficient to follow the thread backwards:</p>
+<pre>
+<!-- TODO -->
+</pre>
+The array <code>DATA[0..BLOCKSIZE - 2]</code> then contains the decoded bytes of the block.
+</section><!-- 13.2.2.4 -->
+</section><!-- 13.2.2 -->
+</section><!-- 13.2 -->
+</section><!-- 13 -->
+</body>
+</html>
