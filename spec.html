@@ -25,7 +25,7 @@ This is a transcription, with minor orthographic and stylistic changes, of the o
 
 <section id="2">
 <h2>2 Document organization</h2>
-<p>This document describes the DjVu file format. It is written “from top down”, providing first a high-level understand ing of the features and techniques used in DjVu (see §<a href="#3">3</a>) , then a mid-level view at the IFF85 level (see §<a href="#7">7</a>), and finally a very detailed decription of the underlying algorithms and and byte-by-byte makeup of DjVu files (see §<a href="#8">8</a>).</p>
+<p>This document describes the DjVu file format. It is written “from top down”, providing first a high-level understand ing of the features and techniques used in DjVu (see §<a href="#3">3</a>), then a mid-level view at the IFF85 level (see §<a href="#7">7</a>), and finally a very detailed decription of the underlying algorithms and and byte-by-byte makeup of DjVu files (see §<a href="#8">8</a>).</p>
 </section><!-- 2 -->
 
 <section id="3">
@@ -34,8 +34,8 @@ This is a transcription, with minor orthographic and stylistic changes, of the o
 
 <section id="3.1">
 <h3>3.1 DjVu images</h3>
-<p>The principal imaging model used in DjVu is the “Mixed Raster Content” (MRC) model described in ITU-T Recommendation T.44, ISO/IEC 16485. In this model, an image is decomposed into foreground and background layers. To select whether a particular pixel comes from the foreground or background, a bitonal “selection” or “mask” layer is provided. These three layers are compressed separately using techniques which are optimized for each type of data.</p>
-<p>The foreground and background layers are compressed using a wavelete-based continous-tone image compression technique known as IW44.</p>
+<p>The principal imaging model used in DjVu is the “Mixed Raster Content” (MRC) model described in ITU-T Recommendation T.44, <a href="https://www.iso.org/standard/32228.html">ISO/IEC 16485</a>. In this model, an image is decomposed into foreground and background layers. To select whether a particular pixel comes from the foreground or background, a bitonal “selection” or “mask” layer is provided. These three layers are compressed separately using techniques which are optimized for each type of data.</p>
+<p>The foreground and background layers are compressed using a wavelet-based continous-tone image compression technique known as “IW44”.</p>
 <p>The mask layer is compressed using a bitonal image compression technique that takes advantage of repetitions of nearly identical shapes on the page (such as characters) to efficiently compress text images.</p>
 <p>A DjVu image need not contain all three layers and alternative compression techniques are available for each layer.</p>
 </section><!-- 3.1 -->
@@ -113,7 +113,8 @@ This is a transcription, with minor orthographic and stylistic changes, of the o
 
 <section id="6.5">
 <h3>6.5 G4</h3>
-<p>ITU-T (CCITT) T.6. Facsimile Coding Schemes and Coding Control Functions for Group 4 Facsimile Apparatus</p>
+<p>ITU-T (CCITT) T.6. Facsimile Coding Schemes and Coding Control Functions for Group 4 Facsimile Apparatus. <a class="bare" href="https://www.itu.int/rec/T-REC-T.6-198811-I/en">https://www.itu.int/rec/T-REC-T.6-198811-I/en</a></p>
+
 </section><!-- 6.5 -->
 
 <section id="6.6">
@@ -385,7 +386,202 @@ This is a transcription, with minor orthographic and stylistic changes, of the o
 <p>Note: if register overflow can be ignored, storing variables <var>A</var> and <var>C</var> in registers of exactly 16 bits allows a simplification of lines 11, 12, 16, and 17 of Figure 1 and lines 8, 9, 12, and 13 of Figure 2.</p>
 </aside>
 <p>At the beginning of a chunk, the values of <var>A</var> and <var>C</var> are reinitialized. When the decoder is decoding a chunk, it may require more bits than are present within the chunk’s data. In this case, all additional required bits are to be assumed by the decoder to be 1. If there are excess bits at the end of a chunk, they are ignored.</p>
+<p><var>K</var> is conceptually an array with a single 8-bit entry for each binary decision context. (In practice, <var>K</var> consists of a number of of individual values, arrays, and tree nodes, but each one has a specific address and a single 8-bit value at any time.) This array is indexed by the value of <var>i</var>, which is the input to the decoder.
+<math>
+  <mrow>
+    <mi>K</mi>
+    <mo stretchy="false" form="prefix">[</mo>
+    <mi>i</mi>
+    <mo stretchy="false" form="postfix">]</mo>
+  </mrow>
+</math>
+is the current value of the probability state index for context <var>i</var>.
+<math>
+  <mrow>
+    <mi>K</mi>
+    <mo stretchy="false" form="prefix">[</mo>
+    <mi>i</mi>
+    <mo stretchy="false" form="postfix">]</mo>
+  </mrow>
+</math>
+may be updated as part of the decoding process.</p>
+<p>In pass-through mode, the decoder is invoked with no input argument. No context is involved.</p>
+<p><var>B</var> is the 1-bit value returned by the decoder.</p>
+<p>The Z&prime;-Coder is state-based. Decoding is governed by four fixed tables. given in Table 9. The tables are indexed by
+<math>
+  <mrow>
+    <mi>K</mi>
+    <mo stretchy="false" form="prefix">[</mo>
+    <mi>i</mi>
+    <mo stretchy="false" form="postfix">]</mo>
+  </mrow>
+</math>,
+the probability state index for the current context. All probability state indices are initialized to 0. That is, at the beginning of coding, for all <var>i</var>,
+<math>
+  <mrow>
+    <mi>K</mi>
+    <mo stretchy="false" form="prefix">[</mo>
+    <mi>i</mi>
+    <mo stretchy="false" form="postfix">]</mo>
+    <mo>=</mo>
+    <mn>0</mn>
+  </mrow>
+</math>.
+These values are not reinitialized at the beginning of chunks after the first.</p>
+<p>The more probably symbol is denoted by MPS. The MPS is 1 if the probability state index is an odd integer, and 0 if the probability state index is an even integer. The less probable symbol is denoted by LPS. The LPS is 0 if the probability state index is an odd integer, and 1 if the probability state context is an even integer.</p>
+<p>
+<math>
+  <msub>
+    <mi>Δ</mi>
+    <mi>k</mi>
+  </msub>
+</math>
+is the amount by which the current arithmetic coding interval is reduced if the decoded symbol is the MPS.
+<math>
+  <msub>
+    <mi>θ</mi>
+    <mi>k</mi>
+  </msub>
+</math>
+is the threshold above which an MPS triggers a probability state update.
+<math>
+  <msub>
+    <mi>μ</mi>
+    <mi>k</mi>
+  </msub>
+</math>
+is the next probability state index for context <var>k</var> after an MPS triggers a probability state index update. An LPS always triggers a probability state index update.
+<math>
+  <msub>
+    <mi>λ</mi>
+    <mi>k</mi>
+  </msub>
+</math>
+is the next probability state index for context <var>k</var> after an LPS.</p>
 </section><!-- 12.1 -->
+
+<section id="12.2">
+<h3>12.2 Initialization</h3>
+<p>Initially, <var>A</var> is set to <span class="hex">0x0000</span>. Two octets are read from the input data stream into the lowest 16 bits of <var>C</var>. If the bits of <var>C</var> are numbered such that bit 15 is the most significant bit and bit 0 is the least significant bit, then the first input octet is stored in bits 15 through 8, and the second input octet is stored in bits 7 through 0.</p>
+</section><!-- 12.2 -->
+
+<section id="12.3">
+<h3>12.3 Decoding</h3>
+<p>Figure 1 shows the steps involved in decoding a single binary decision. The input to the decoder is the index <var>i</var> of the appropriate context for the binary decision being decoded. The output from the decoder is a single bit <var>B</var>.</p>
+<figure id="figure-1">
+<pre>
+<code>Z := A + Δ<sub>K[i]</sub></code>
+<code>D := 0x6000 + (Z + A)/4</code>
+<code>if (Z &gt; D) { Z := D }</code>
+<code>if (C &gt; Z) {</code>
+    <code>B := K[i] mod 2</code>
+    <code>if (A &geq; θ<sub>K[i]</sub>) { K[i] = μ<sub>K[i]</sub> }</code>
+    <code>A := Z</code>
+<code>}</code>
+<code>else {</code>
+<code>    B := 1 - (K[i] mod 2)</code>
+<code>    A := A + 0x10000 - Z</code>
+<code>    C := C + 0x10000 - Z</code>
+<code>    K[i] = λ<sub>K[i]</sub></code>
+<code>}</code>
+<code>while (A &geq; 0x8000) {</code>
+<code>    A := A + A - 0x10000</code>
+<code>    A := C + C - 0x10000 + next code bit</code>
+<code>}</code>
+<code>return B</code>
+</pre>
+<figcaption>Figure 1: decoder for the Z&prime;-Coder</figcaption>
+</figure>
+
+<section id="12.3.1">
+<h4>12.3.1 Notes on specific lines of Figure 1</h4>
+<dl>
+<dt>Line 2</dt>
+<dd>The division is a right shift, discarding the two least significant bits.</dd>
+<dt>Lines 4–8</dt>
+<dd>These lines are executed when the decoded bit is the MPS.</dd>
+<dt>Line 5</dt>
+<dd>This line determines the MPS from from the parity of the probability state index.</dd>
+<dt>Line 6</dt>
+<dd>Sometimes an MPS event triggers an update of the probability state index, based on the value of
+<math>
+  <msub>
+    <mi>θ</mi>
+    <mi>k</mi>
+  </msub>
+</math>.
+Note that when the probability state index <var>k</var> = 0 or <var>k</var> &geq; 83,
+<math>
+  <mrow>
+    <msub>
+      <mi>θ</mi>
+      <mi>k</mi>
+    </msub>
+    <mo>=</mo>
+    <mn>0</mn>
+  </mrow>
+</math>,
+so an MPS will trigger an update of the probability state index. All probability state indices are initialized to 0, but the first coded decision for a context causes the index to become larger than 83. When <var>k</var> = 0 or <var>k</var> &geq; 83, the probability estimate for the context is in its early estimation phase. When 0 &lt; <var>k</var> &lt; 83, the probability estimate for the context is in its steady-state phase, which it never leaves.</dd>
+<dt>Lines 9–14</dt>
+<dd>These lines are executed when the decoded bit is the LPS.</dd>
+<dt>Line 10</dt>
+<dd>This line determines the LPS from the parity of the probability state index.</dd>
+<dt>Line 13</dt>
+<dd>An LPS always triggers an update of the probability state index.</dd>
+<dt>Lines 15–18</dt>
+<dd>When the values in the registers are too large, they must be renormalized.</dd>
+<dt>Lines 16–17</dt>
+<dd><var>A</var> + <var>A</var> and <var>C</var> + <var>C</var> may be accomplished by left shifts, leaving the least significant bit equal to 0.</dd>
+<dt>Line 17</dt>
+<dd>The least significant bit of <var>C</var> is filled with the next bit from the input stream. Bits are taken from each octet in the input stream most significant bit first.</dd>
+</dl>
+</section><!-- 12.3.1 -->
+
+</section><!-- 12.3 -->
+
+<section id="12.4">
+<h3>12.4 Pass-through decoding</h3>
+<p>Figure 2 shows the steps involved in decoding a single binary decision using the Z&prime;-Coder in pass-through mode. No input is required. No context is involved. No probability state index values are updated. The output from the decoder is the single bit <var>B</var>.</p>
+<figure id="figure-2">
+<pre>
+<code>Z := 0x8000 + (A + A + A)/8</code>
+<code>if (C &gt; Z) {</code>
+    <code>B := 0</code>
+    <code>A := Z</code>
+<code>}</code>
+<code>else {</code>
+<code>    B := 1</code>
+<code>    A := A + 0x10000 - Z</code>
+<code>    C := C + 0x10000 - Z</code>
+<code>}</code>
+<code>while (A &geq; 0x8000) {</code>
+<code>    A := A + A - 0x10000</code>
+<code>    A := C + C - 0x10000 + next code bit</code>
+<code>}</code>
+<code>return B</code>
+</pre>
+<figcaption>Figure 2: decoder for the Z&prime;-Coder operating in pass-through mode</figcaption>
+</figure>
+
+<section id="12.4.1">
+<h4>12.4.1 Notes on specific lines of Figure 2</h4>
+<dl>
+<dt>Line 1</dt>
+<dd>The division is a right shift, discarding the three least significant bits.</dd>
+<dt>Lines 2–5</dt>
+<dd>These lines are executed when the decoded bit is 0.</dd>
+<dt>Lines 6–10</dt>
+<dd>These lines are executed when the decoded bit is 1.</dd>
+<dt>Lines 11–14</dt>
+<dd>When the values in the registers are too large, they must be renormalized.</dd>
+<dt>Lines 12–13</dt>
+<dd><var>A</var> + <var>A</var> and <var>C</var> + <var>C</var> may be accomplished by left shifts, leaving the least significant bit equal to 0.</dd>
+<dt>Line 13</dt>
+<dd>The least significant bit of <var>C</var> is filled with the next bit from the input stream. Bits are taken from each octet in the input stream most significant bit first.</dd>
+</dl>
+</section><!-- 12.4.1 -->
+
+</section><!-- 12.4 -->
 
 </section><!-- 12 -->
 
@@ -416,7 +612,7 @@ This is a transcription, with minor orthographic and stylistic changes, of the o
 <p>For each block, one must decode</p>
 <ul>
 <li>the block size (with <code>decode_raw</code>)</li>
-<li>the estimation speed <code>FSHIFT ∈ {0, 1, 2}</code> (two bits with the passthrough decoder)</li>
+<li>the estimation speed <code>FSHIFT ∈ {0, 1, 2}</code> (two bits with the pass-through decoder)</li>
 <li>the sequence of symbols representing the Burrows–Wheeler transform of the block. At this point, the sequence of symbols is logically encoded as a sequence of numbers representing the position of each symbol in the MTF array.</li>
 </ul>
 <p>Then one must perform the inverse Burrows–Wheeler transform to recover the decoded block.</p>
@@ -642,8 +838,7 @@ and simply consider
 <p>Now we can discuss how the numbers <code>MTFNO</code> are stored. There are 262 arithmetic coding contexts. These are initialized to zero at the beginning of the stream decoding process. They should <em>not</em> be reset to zero at the beginning of the block decoding process.</p>
 <p>Because the most frequently used symbols should appear near the front of the array, we expect small values for <code>MTFNO</code> (the index into the MTF array). By design, the number of bits and the number of contexts required to decode increases for larger values of <code>MTFNO</code>:</p>
 <ul>
-<li>A first bit is decoded using context 0, 1 or 2.</li>
-<li>Context 0 or 1 is used if the previous <code>MTFNO</code> was 0 or 1. Otherwise context 2 is used. If this bit is set, the new <code>MTFNO</code> is 0.</li>
+<li>A first bit is decoded using context 0, 1 or 2. Context 0 or 1 is used if the previous <code>MTFNO</code> was 0 or 1. Otherwise context 2 is used. If this bit is set, the new <code>MTFNO</code> is 0.</li>
 <li>Otherwise a second bit is decoded using context 3, 4 or 5. Context 3 or 4 is used if the previous <code>MTFNO</code> was 0 or 1. Otherwise context 5 is used. If this bit is set, the new <code>MTFNO</code> is 1.</li>
 <li>Otherwise a third bit is decoded using context 6. If this bit is set, the new <code>MTFNO</code> is obtained by adding 2 to a 1-bit number decoded with <code>decode_bin</code> using context 7.</li>
 <li>Otherwise a fourth bit is decoded using context 8. If this bit is set, the new <code>MTFNO</code> is obtained by adding 4 to a 2-bit number decoded with <code>decode_bin</code> using contexts <code>9..11</code>.</li>
