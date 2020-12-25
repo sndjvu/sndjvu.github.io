@@ -5,8 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>DjVu Reference</title>
 <style>
-#about { margin: 0 auto; max-width: 65%; border: 1px solid black; font-size: larger; padding: 1%; background-color: pink; }
+#about { margin: 0 auto; max-width: 65%; border: 1px solid black; font-size: larger; padding: 1rem; background-color: pink; }
 .filename { font-family: sans-serif; }
+.hex, .ck { font-family: monospace; }
 </style>
 </head>
 <body>
@@ -15,6 +16,281 @@ This is a transcription, with minor orthographic and stylistic changes, of the o
 </div>
 
 <h1>DjVu Reference</h1>
+
+<section id="1">
+<h2>1 Introduction</h2>
+<p>Althouh the Internet has given us a worldwide infrastructure on which to build the universal library, much of the world’s knowledge, history, and literature is still trapped on paper in the basements of the world’s traditional libraries. Many libraries and content owners are in the process of digitizing their collections. While many such efforts involve the painstaking process of converting paper documents to computer-friendly form, such as SGML-based formats, the high cost of such conversions limits their extent. Scanning documents and distributing the resulting images electronically is not only considerably cheaper, but also more faithful to the original document because it preserves its visual aspect.</p>
+<!-- TODO -->
+</section><!-- 1 -->
+
+<section id="2">
+<h2>2 Document organization</h2>
+</section><!-- 2 -->
+
+<section id="3">
+<h2>3 Overview</h2>
+</section><!-- 3 -->
+
+<section id="4">
+<h2>4 What’s new in the DjVu file format</h2>
+</section><!-- 4 -->
+
+<section id="5">
+<h2>5 Acknowledgements</h2>
+</section><!-- 5 -->
+
+<section id="6">
+<h2>6 References</h2>
+</section><!-- 6 -->
+
+<section id="7">
+<h2>7 Component pieces (IFF chunks) of DjVu documents and images</h2>
+</section><!-- 7 -->
+
+<section id="8">
+<h2>8 Low-level chunk structure and definition</h2>
+<p>This section describes the DjVu file format at a low level. This includes the binary layout of the IFF85 wrapper and, of course, the layout of each contained chunk.</p>
+
+<section id="8.1">
+<h3>8.1 Header</h3>
+<p>The first four bytes of a DjVu file are <span class="hex">0x41 0x54 0x26 0x54</span>. This preamble is not part of the EA IFF85 format, but it is required in order to identify DjVu files.</p>
+</section><!-- 8.1 -->
+
+<section id="8.2">
+<h3>8.2 DjVu file structure</h3>
+
+<section id="8.2.1">
+<h4>8.2.1 IFF wrapper</h4>
+<p>An IFF file consists of a number of chunks. Each chunk is laid out in three fields:</p>
+<table>
+<tr>
+  <td><code>BYTE[4]</code></td>
+  <td>Chunk ID. Describes the use of the chunk. The strings that identify the types of chunks used in DjVu are listed below.</td>
+</tr>
+<tr>
+  <td><code>BE32</code></td>
+  <td>The length of the data.</td>
+</tr>
+<tr>
+  <td><code>BYTE[]</code></td>
+  <td>The contained data.</td>
+</tr>
+</table>
+<p>A chunk whose type is not recognized by the application is to be ignored. In the IFF format, chunks may be nested: a chunk may contain other chunks as part of its data. In the DjVu format, there is only one chunk at the outermost nesting level, a <span class="ck">FORM</span> chunk. All other chunks appear within the <span class="ck">FORM</span> chunk, sequentially, with no nesting.</p>
+<p>Example:</p>
+<table>
+<tr>
+  <td><span class="hex">00000000</span></td>
+  <td><span class="hex">41 54 26 54</span></td>
+  <td>"AT&amp;T"; magic described in §<a href="#8.1">8.1</a>.</td>
+</tr>
+<tr>
+  <td><span class="hex">00000004</span></td>
+  <td><span class="hex">46 4f 52 4d</span></td>
+  <td>"FORM"; chunk ID = <span class="ck">FORM</span></td>
+</tr>
+<tr>
+  <td><span class="hex">00000008</span></td>
+  <td><span class="hex">00 00 68 a6</span></td>
+  <td><span class="hex">0xa668</span> = 26970; length of this <span class="ck">FORM</span> chunk</td>
+</tr>
+<tr>
+  <td><span class="hex">0000000b</span></td>
+  <td><span class="hex">44 4a 56 55</span></td>
+  <td>"DJVU"; first four bytes of contained data. Since this is a <span class="ck">FORM</span> chunk, this starts with the subidentifier. This is a <span class="ck">FORM:DJVU</span> chunk, a single-page document.</td>
+</tr>
+</table>
+</section><!-- 8.2.1 -->
+
+<section id="8.2.2">
+<h4>8.2.2 Chunk summary</h4>
+<p>The chunks used in the DjVu file format are summarized in Table 1.</p>
+<table id="table-1">
+<caption>Table 1: chunk summary</caption>
+<thead>
+<tr>
+  <td>Chunk ID</td>
+  <td>Usage</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><span class="ck">FORM</span></td>
+  <td>The composite chunk. The first four bytes of the <span class="ck">FORM</span> chunk are a secondary identifier. Such chunks are referred to as <code>FORM:XXXX</code> where "<code>XXXX</code>" stands for the secondary identifier.</td>
+</tr>
+<tr>
+  <td><span class="ck">FORM:DJVM</span></td>
+  <td>A multi-page DjVu document. Composite chunk that contains the <span class="ck">DIRM</span> chunk, possible shared/included chunks and subsequent <span class="ck">FORM:DJVU</span> chunks which make up a multi-page document.</td>
+</tr>
+<tr>
+  <td><span class="ck">FORM:DJVU</span></td>
+  <td>A DjVu page/single-page DjVu document. Composite chunk that contains the chunks that make up a page in a DjVu document.</td>
+</tr>
+<tr>
+  <td><span class="ck">FORM:DJVI</span></td>
+  <td>A “shared” DjVu file which is included via the <span class="ck">INCL</span> chunk. Shared annotations, shared shape dictionary.</td>
+</tr>
+<tr>
+  <td><span class="ck">FORM:THUM</span></td>
+  <td>Composite chunk that contains the <span class="ck">TH44</span> chunks that are the embedded thumbnails.</td>
+</tr>
+<tr>
+  <td><span class="ck">DIRM</span></td>
+  <td>Page name information for multi-page documents.</td>
+</tr>
+<tr>
+  <td><span class="ck">NAVM</span></td>
+  <td>Bookmark information.</td>
+</tr>
+<tr>
+  <td><span class="ck">ANTa</span>, <span class="ck">ANTz</span></td>
+  <td>Annotations, including both initial view settings and overlaid hyperlinks, text boxes, etc.</td>
+</tr>
+<tr>
+  <td><span class="ck">TXTa</span>, <span class="ck">TXTz</span></td>
+  <td>Unicode text and layout information.</td>
+</tr>
+<tr>
+  <td><span class="ck">Djbz</span></td>
+  <td>Shared shape table.</td>
+</tr>
+<tr>
+  <td><span class="ck">Sjbz</span></td>
+  <td>BZZ-compressed JB2 bitonal data used to store mask.</td>
+</tr>
+<tr>
+  <td><span class="ck">FG44</span></td>
+  <td>IW44 data used to store foreground.</td>
+</tr>
+<tr>
+  <td><span class="ck">BG44</span></td>
+  <td>IW44 data used to store background.</td>
+</tr>
+<tr>
+  <td><span class="ck">TH44</span></td>
+  <td>IW44 data used to store embedded thumbnail images.</td>
+</tr>
+<tr>
+  <td><span class="ck">WMRM</span></td>
+  <td>JB2 data required to remove a watermark.</td>
+</tr>
+<tr>
+  <td><span class="ck">FGbz</span></td>
+  <td>Color JB2 data. Provides a color for each [blit or shape?] in the corresponding <span class="ck">Sjbz</span> chunk.</td>
+</tr>
+<tr>
+  <td><span class="ck">INFO</span></td>
+  <td>Information about a DjVu page.</td>
+</tr>
+<tr>
+  <td><span class="ck">INCL</span></td>
+  <td>The ID of an included <span class="ck">FORM:DJVI</span> chunk.</td>
+</tr>
+<tr>
+  <td><span class="ck">BGjp</span></td>
+  <td>JPEG-encoded background.</td>
+</tr>
+<tr>
+  <td><span class="ck">FGjp</span></td>
+  <td>JPEG-encoded foreground.</td>
+</tr>
+<tr>
+  <td><span class="ck">Smmr</span></td>
+  <td>G4-encoded mask.</td>
+</tr>
+</tbody>
+</table>
+</section><!-- 8.2.2 -->
+
+</section><!-- 8.2 -->
+
+<section id="8.3">
+<h3>8.3 IFF chunk types</h3>
+
+<section id="8.3.1">
+<h4>8.3.1 Container chunk: <span class="ck">FORM</span></h4>
+<p>The <span class="ck">FORM</span> chunk is used as a chunk container. The first four bytes of the <span class="ck">FORM</span> chunk are a secondary ID used to identify the contained chunks.</p>
+
+<section id="8.3.1.1">
+<h5>8.3.1.1 <span class="ck">FORM:DJVM</span></h5>
+<p>As discussed in §<a href="#7.2">7.2</a>, a multi-page DjVu document is composed of a single (composite) <span class="ck">FORM:DJVM</span> chunk. The first nested chunk is always a <span class="ck">DIRM</span> chunk containing the document directory (see <span class="filename">DjVmDir.h</span>), which represents the list of the component files that make up the document. An optional <span class="ck">NAVM</span> chunk, which describes the outline of the document, may follow the <span class="ck">DIRM</span> chunk.</p>
+<p>Example:</p>
+<pre>
+<span class="ck">FORM:DJVM</span> [126475 bytes]
+  <span class="ck">DIRM</span> [59 bytes] Document directory (bundled, 3 files, 2 pages)
+  <span class="ck">FORM:DJVI</span> [3493 bytes] <span class="filename">dict0002.iff</span>
+  <span class="ck">FORM:DJVU</span> [115016 bytes] <span class="filename">p0001.djvu</span>
+  <span class="ck">FORM:DJVU</span> [7869 bytes] <span class="filename">p0002.djvu</span>
+</pre>
+</section><!-- 8.3.1.1 -->
+
+<section id="8.3.1.2">
+<h5>8.3.1.2 <span class="ck">FORM:DJVU</span></h5>
+<p>As discussed in §<a href="7.1">7.1</a>, a single page in a DjVu document is contained in a single (composite) <span class="ck">FORM:DJVU</span> chunk. The nested first chunk must be the <span class="ck">INFO</span> chunk. The chunks after the <span class="ck">INFO</span> chunk may occur in any order, although the order of the <span class="ck">BG44</span> chunks, if there is more than one, is significant.</p>
+<p>Example:</p>
+<pre>
+<span class="ck">FORM:DJVU</span> [26790 bytes]
+  <span class="ck">INFO</span> [10 bytes] 2202 × 967, version 26, 300 dpi, gamma = 2.2
+  <span class="ck">Sjbz</span> [13133 bytes] JB2 bilevel data
+  <span class="ck">FG44</span> [185 bytes] IW44 data #1, 76 slices, version 1.2 (color), 184 × 81
+  <span class="ck">BG44</span> [935 bytes] IW44 data #1, 74 slices, version 1.2 (color), 734 × 323
+  <span class="ck">BG44</span> [1672 bytes] IW44 data #2, 10 slices
+  <span class="ck">BG44</span> [815 bytes] IW44 data #3, 4 slices
+  <span class="ck">BG44</span> [9976 bytes] IW44 data #4, 9 slices
+</pre>
+</section><!-- 8.3.1.2 -->
+
+<section id="8.3.1.3">
+<h5>8.3.1.3 <span class="ck">FORM:DJVI</span></h5>
+<p>Multi-page DjVu documents can share information between pages by nesting a chunk inside a <span class="ck">FORM:DJVI</span> chunk (which is itself held inside the <span class="ck">FORM:DJVM</span> chunk) and referencing the contained chunk from within a page. Individual pages reference the shared chunks via the <span class="ck">INCL</span> chunk.</p>
+<p>Example:</p>
+<pre>
+<span class="ck">FORM:DJVM</span> [126475 bytes]
+  <span class="ck">DIRM</span> [59 bytes] Document directory (bundled, 3 files, 2 pages)
+  <strong><span class="ck">FORM:DJVI</span> [3493 bytes] <span class="filename">dict0002.iff</span></strong>
+    <strong><span class="ck">Djbz</span> [3481 bytes] JB2 shared dictionary</strong>
+  <span class="ck">FORM:DJVU</span> [115016 bytes] <span class="filename">p0001.djvu</span>
+    <span class="ck">INFO</span> [10 bytes] 2539 × 3295, version 25, 300 dpi, gamma = 2.2
+    <strong><span class="ck">INCL</span> [12 bytes] Indirection chunk → <span class="filename">dict0002.iff</span></strong>
+    <span class="ck">Sjbz</span> [70497 bytes] JB2 bilevel data
+</pre>
+</section><!-- 8.3.1.3 -->
+
+<section id="8.3.1.4">
+<h5>8.3.1.4 <span class="ck">FORM:THUM</span></h5>
+<p>Pre-rendered thumbnails may be included. This allows very large documents to render thumbnails of pages without downloading and decoding them. <span class="ck">FORM:THUM</span> chunks contain several <span class="ck">TH44</span> chunks. Each of these chunks contains the thumbnails of the pages that follow.</p>
+<p>Example:</p>
+<pre>
+<!-- TODO -->
+</pre>
+</section><!-- 8.3.1.4 -->
+
+</section><!-- 8.3.1 -->
+
+<section id="8.3.2">
+<h4>8.3.2 Directory chunk: <span class="ck">DIRM</span></h4>
+<p></p>
+</section><!-- 8.3.2 -->
+
+</section><!-- 8.3 -->
+
+</section><!-- 8 -->
+
+<section id="9">
+<h2>9 DjVu in the raw (binary and IFF-level dumps)</h2>
+</section><!-- 9 -->
+
+<section id="10">
+<h2>10 Appendix 1: IW44 coding</h2>
+</section><!-- 10 -->
+
+<section id="11">
+<h2>11 Appendix 2: JB2 coding</h2>
+</section><!-- 11 -->
+
+<section id="12">
+<h2>12 Appendix 3: Z&prime; coding</h2>
+</section><!-- 12 -->
 
 <section id="13">
 <h2>13 Appendix 4: BZZ coding</h2>
@@ -43,7 +319,7 @@ This is a transcription, with minor orthographic and stylistic changes, of the o
 <p>For each block, one must decode</p>
 <ul>
 <li>the block size (with <code>decode_raw</code>)</li>
-<li>the estimation speed <code>FSHIFT=0,1,2</code> (two bits with the passthrough decoder)</li>
+<li>the estimation speed <code>FSHIFT ∈ {0, 1, 2}</code> (two bits with the passthrough decoder)</li>
 <li>the sequence of symbols representing the Burrows–Wheeler transform of the block. At this point, the sequence of symbols is logically encoded as a sequence of numbers representing the position of each symbol in the MTF array.</li>
 </ul>
 <p>Then one must perform the inverse Burrows–Wheeler transform to recover the decoded block.</p>
@@ -56,7 +332,7 @@ This is a transcription, with minor orthographic and stylistic changes, of the o
 
 <section id="13.2.2.2">
 <h5>13.2.2.2 MTF array reordering</h5>
-<p>The MTF array contains 256 bytes initialized with the identity mapping, that is <code>MTF[0] = 0, MTF[1] = 1, ... , MTF[255] = 255</code>.</p>
+<p>The MTF array contains 256 bytes initialized with the identity mapping, that is <code>MTF[0] = 0</code>, <code>MTF[1] = 1</code>, … , <code>MTF[255] = 255</code>.</p>
 <p>Whenever one decodes a number <code>MTFNO</code>, the corresponding symbol to store in the Burrows–Wheeler buffer is <code>MTF[MTFNO]</code> (except for the <code>&langle;EOB&rangle;</code> symbol — see §<a href="#13.2.2.3">13.2.2.3</a>) and the contents of the MTF array are rotated. The rotation moves the symbol that was at position <code>MTF[MTFNO]</code> to a position <code>M</code> that can be 0, 1, 2, or 3. Meanwhile the symbols <code>MTF[M]</code> to <code>MTF[MTFNO - 1]</code> are moved to positions <code>M + 1</code> to <code>MTFNO</code>.</p>
 <p>The position <code>M</code> is chosen using an estimate of the frequency of the symbol <code>MTF[MTFNO]</code>. One strives to position the most frequent symbols at the beginning of the MTF array. To that end, one maintains an array <code>FREQ[0..3]</code> that contains numbers representative of the instantaneous frequencies of the symbols <code>MTF[0..3]</code>.</p>
 <p>Of course this array must also be “rotated” when the rotation of the MTF array affects its first four elements.</p>
@@ -300,5 +576,6 @@ The array <code>DATA[0..BLOCKSIZE - 2]</code> then contains the decoded bytes of
 </section><!-- 13.2.2 -->
 </section><!-- 13.2 -->
 </section><!-- 13 -->
+
 </body>
 </html>
