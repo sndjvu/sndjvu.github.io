@@ -34,7 +34,7 @@ This is a transcription, with minor orthographic and stylistic changes, of the o
 
 <section id="3.1">
 <h3>3.1 DjVu images</h3>
-<p>The principal imaging model used in DjVu is the “Mixed Raster Content” (MRC) model described in ITU-T Recommendation T.44, <a href="https://www.iso.org/standard/32228.html">ISO/IEC 16485</a>. In this model, an image is decomposed into foreground and background layers. To select whether a particular pixel comes from the foreground or background, a bitonal “selection” or “mask” layer is provided. These three layers are compressed separately using techniques which are optimized for each type of data.</p>
+<p>The principal imaging model used in DjVu is the “Mixed Raster Content” (MRC) model described in <a href="https://www.itu.int/rec/T-REC-T.44-200501-I/en">ITU-T Recommendation T.44</a>, <a href="https://www.iso.org/standard/32228.html">ISO/IEC 16485</a>. In this model, an image is decomposed into foreground and background layers. To select whether a particular pixel comes from the foreground or background, a bitonal “selection” or “mask” layer is provided. These three layers are compressed separately using techniques which are optimized for each type of data.</p>
 <p>The foreground and background layers are compressed using a wavelet-based continous-tone image compression technique known as “IW44”.</p>
 <p>The mask layer is compressed using a bitonal image compression technique that takes advantage of repetitions of nearly identical shapes on the page (such as characters) to efficiently compress text images.</p>
 <p>A DjVu image need not contain all three layers and alternative compression techniques are available for each layer.</p>
