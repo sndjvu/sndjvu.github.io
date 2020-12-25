@@ -298,7 +298,7 @@ This is a transcription, with minor orthographic and stylistic changes, of the o
 
 <section id="8.3.1.1">
 <h5>8.3.1.1 <span class="ck">FORM:DJVM</span></h5>
-<p>As discussed in §<a href="#7.2">7.2</a>, a multi-page DjVu document is composed of a single (composite) <span class="ck">FORM:DJVM</span> chunk. The first nested chunk is always a <span class="ck">DIRM</span> chunk containing the document directory (see <span class="filename">DjVmDir.h</span>), which represents the list of the component files that make up the document. An optional <span class="ck">NAVM</span> chunk, which describes the outline of the document, may follow the <span class="ck">DIRM</span> chunk.</p>
+<p>As discussed in §<a href="#7.2">7.2</a>, a multi-page DjVu document is composed of a single (composite) <span class="ck">FORM:DJVM</span> chunk. The first nested chunk is always a <span class="ck">DIRM</span> chunk containing the document directory (see <a class="filename" href="https://sourceforge.net/p/djvu/djvulibre-git/ci/master/tree/libdjvu/DjVmDir.cpp">DjVmDir.h</a>), which represents the list of the component files that make up the document. An optional <span class="ck">NAVM</span> chunk, which describes the outline of the document, may follow the <span class="ck">DIRM</span> chunk.</p>
 <p>Example:</p>
 <pre>
 <span class="ck">FORM:DJVM</span> [126475 bytes]
@@ -376,7 +376,7 @@ This is a transcription, with minor orthographic and stylistic changes, of the o
 <section id="12">
 <h2>12 Appendix 3: Z&prime; coding</h2>
 <p>The Z&prime;-Coder is an approximate binary arithmetic coder. Decoding proceeds as follows.</p>
-<p>See also files <span class="filename">ZPCodec.h</span> and <span class="filename">ZPCodec.cpp</span> in DjVuLibre.</p>
+<p>See also files <a class="filename" href="https://sourceforge.net/p/djvu/djvulibre-git/ci/master/tree/libdjvu/ZPCodec.h">ZPCodec.h</a> and <a class="filename" href="https://sourceforge.net/p/djvu/djvulibre-git/ci/master/tree/libdjvu/ZPCodec.cpp">ZPCodec.cpp</a> in DjVuLibre.</p>
 
 <section id="12.1">
 <h3>12.1 Registers and data storage</h3>
@@ -392,7 +392,7 @@ This is a transcription, with minor orthographic and stylistic changes, of the o
 <section id="13">
 <h2>13 Appendix 4: BZZ coding</h2>
 <p>Numerous streams in the DjVu file format are compressed using the general-purpose compressor described here called “BZZ”. BZZ transforms the input data using the well-documented Burrows–Wheeler transform. However, the traditional “Move To Front” permutation table is augmented with a frequency estimation provided by the Z&prime;-Coder.</p>
-<p>See also file <span class="filename">BSByteStream.cpp</span>.</p>
+<p>See also file <a class="filename" href="https://sourceforge.net/p/djvu/djvulibre-git/ci/master/tree/libdjvu/BSByteStream.cpp">BSByteStream.cpp</a>.</p>
 
 <section id="13.1">
 <h3>13.1 Encoding</h3>
