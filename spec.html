@@ -611,7 +611,22 @@ is the next probability state index for context <var>k</var> after an LPS.</p>
     <mi>k</mi>
   </msub>
 </math>.
-Note that when the probability state index <var>k</var> = 0 or <var>k</var> &geq; 83,
+Note that when the probability state index
+<math>
+  <mrow>
+    <mi>k</mi>
+    <mo>=</mo>
+    <mn>0</mn>
+  </mrow>
+</math>
+or
+<math>
+  <mrow>
+    <mi>k</mi>
+    <mo>&gt;</mo><!-- FIXME -->
+    <mn>83</mn>
+  </mrow>
+</math>,
 <math>
   <mrow>
     <msub>
@@ -622,7 +637,33 @@ Note that when the probability state index <var>k</var> = 0 or <var>k</var> &geq
     <mn>0</mn>
   </mrow>
 </math>,
-so an MPS will trigger an update of the probability state index. All probability state indices are initialized to 0, but the first coded decision for a context causes the index to become larger than 83. When <var>k</var> = 0 or <var>k</var> &geq; 83, the probability estimate for the context is in its early estimation phase. When 0 &lt; <var>k</var> &lt; 83, the probability estimate for the context is in its steady-state phase, which it never leaves.</dd>
+so an MPS will trigger an update of the probability state index. All probability state indices are initialized to 0, but the first coded decision for a context causes the index to become at least 83. When
+<math>
+  <mrow>
+    <mi>k</mi>
+    <mo>=</mo>
+    <mn>0</mn>
+  </mrow>
+</math>
+or
+<math>
+  <mrow>
+    <mi>k</mi>
+    <mo>≥</mo>
+    <mn>83</mn>
+  </mrow>
+</math>,
+the probability estimate for the context is in its early estimation phase. When
+<math>
+  <mrow>
+    <mn>0</mn>
+    <mo>&lt;</mo>
+    <mi>k</mi>
+    <mo>&lt;</mo>
+    <mn>83</mn>
+  </mrow>
+</math>,
+the probability estimate for the context is in its steady-state phase, which it never leaves.</dd>
 <dt>Lines 9–14</dt>
 <dd>These lines are executed when the decoded bit is the LPS.</dd>
 <dt>Line 10</dt>
@@ -632,7 +673,23 @@ so an MPS will trigger an update of the probability state index. All probability
 <dt>Lines 15–18</dt>
 <dd>When the values in the registers are too large, they must be renormalized.</dd>
 <dt>Lines 16–17</dt>
-<dd><var>A</var> + <var>A</var> and <var>C</var> + <var>C</var> may be accomplished by left shifts, leaving the least significant bit equal to 0.</dd>
+<dd>
+<math>
+  <mrow>
+    <mi>A</mi>
+    <mo>+</mo>
+    <mi>A</mi>
+  </mrow>
+</math>
+and
+<math>
+  <mrow>
+    <mi>C</mi>
+    <mo>+</mo>
+    <mi>C</mi>
+  </mrow>
+</math>
+may be accomplished by left shifts, leaving the least significant bit equal to 0.</dd>
 <dt>Line 17</dt>
 <dd>The least significant bit of <var>C</var> is filled with the next bit from the input stream. Bits are taken from each octet in the input stream most significant bit first.</dd>
 </dl>
@@ -675,7 +732,23 @@ so an MPS will trigger an update of the probability state index. All probability
 <dt>Lines 11–14</dt>
 <dd>When the values in the registers are too large, they must be renormalized.</dd>
 <dt>Lines 12–13</dt>
-<dd><var>A</var> + <var>A</var> and <var>C</var> + <var>C</var> may be accomplished by left shifts, leaving the least significant bit equal to 0.</dd>
+<dd>
+<math>
+  <mrow>
+    <mi>A</mi>
+    <mo>+</mo>
+    <mi>A</mi>
+  </mrow>
+</math>
+and
+<math>
+  <mrow>
+    <mi>C</mi>
+    <mo>+</mo>
+    <mi>C</mi>
+  </mrow>
+</math>
+may be accomplished by left shifts, leaving the least significant bit equal to 0.</dd>
 <dt>Line 13</dt>
 <dd>The least significant bit of <var>C</var> is filled with the next bit from the input stream. Bits are taken from each octet in the input stream most significant bit first.</dd>
 </dl>
@@ -734,15 +807,7 @@ so an MPS will trigger an update of the probability state index. All probability
   <mi>T</mi>
   <mo stretchy="false" form="postfix">)</mo>
 </math>
-of a particular symbol
-<math>
-  <mi>S</mi>
-</math>
-measured after decoding the
-<math>
-<mi>T</mi>
-</math>th
-symbol. Ideally,
+of a particular symbol <var>S</var> measured after decoding the <var>T</var>th symbol. Ideally,
 <math display="block">
   <mrow>
     <mi>F</mi>
@@ -783,7 +848,7 @@ This models how quickly one forgets past information, and
     <mn>1</mn>
   </mrow>
 </math>
-if the <math><mi>T</mi></math>th symbol is <math><mi>S</mi></math>, and
+if the <var>T</var>th symbol is <var>S</var>, and
 <math>
   <mrow>
     <mi>D</mi>
@@ -798,7 +863,7 @@ otherwise. This allows
   <mi>T</mi>
   <mo stretchy="false" form="postfix">)</mo>
 </math>
-to grow each time the symbol <math><mi>S</mi></math> occurs.
+to grow each time the symbol <var>S</var> occurs.
 </li>
 </ul>
 <p>To avoid multiplying all the frequencies by <math><mi>λ</mi></math>, the <code>FREQ</code> array contains instead
@@ -843,14 +908,14 @@ It is then easy to see that
     </msup>
   </mrow>
 </math>
-Therefore we only need to update the <math><mi>G</mi></math> corresponding to the symbol being decoded (i.e.&nbsp;<math>
+Therefore we only need to update the <var>G</var> corresponding to the symbol being decoded (i.e.&nbsp;<math>
   <mrow>
     <mi>D</mi>
     <mo>=</mo>
     <mn>1</mn>
   </mrow>
 </math>),
-since the <math><mi>G</mi></math> for the other symbols does not change.</p>
+since the <var>G</var> for the other symbols does not change.</p>
 <p>A dedicated variable <code>FADD</code> contains
 <math>
   <mrow>
