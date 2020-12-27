@@ -17,10 +17,19 @@ This is a transcription, with minor orthographic and stylistic changes, of the o
 
 <h1>DjVu Reference</h1>
 
+<table>
+<tr><td>Document Date:</td><td>November 2005</td></tr>
+<tr><td>From:</td><td>Lizardtech, a Celartem Company</td></tr>
+<tr><td>Status of Standard:</td><td>Released</td></tr>
+</table>
+
 <section id="1">
 <h2>1 Introduction</h2>
 <p>Althouh the Internet has given us a worldwide infrastructure on which to build the universal library, much of the world’s knowledge, history, and literature is still trapped on paper in the basements of the world’s traditional libraries. Many libraries and content owners are in the process of digitizing their collections. While many such efforts involve the painstaking process of converting paper documents to computer-friendly form, such as SGML-based formats, the high cost of such conversions limits their extent. Scanning documents and distributing the resulting images electronically is not only considerably cheaper, but also more faithful to the original document because it preserves its visual aspect.</p>
-<!-- TODO -->
+<p>Despite the quickly-improving speed of network connections and computers, the number of scanned document images accessible on the Web today is relatively small. There are several reasons for this.</p>
+<p>The first reason is the relatively high cost of scanning anything else but unbound sheets in black and white. This problem is slowly going away with the appearance of fast and low-cost color scanners with sheet feeders.</p>
+<p>The second reason is that long-established image compression standards and file formats have proved inadequate for distributing scanned documents at high resolution, particularly color documents. Not only are the file sizes and download times impractical, the decoding and rendering times are also prohibitive. A typical magazine page scanned in color at 100 dpi in JPEG would typically occupy 100 KB to 200 KB, but the text would be hardly readable: insufficient for screen viewing and totally unacceptable for printing. The same page at 300 dpi would have sufficient quality for viewing and printing, but the file size would be 300 KB to 1000 KB at best, which is impractical for remote access. Another major problem is that a fully-decoded 300 dpi color image of a letter-size page occupies 24 MB of memory and easily causes disk swapping.</p>
+<p>The third reason is that digital documents are more than just a collection of individual page images. Pages in a scanned document have a natural serial order. Special provision must be made to ensure that flipping pages be instantaneous and effortless so as to maintain a good user experience. Even more important, most existing document formats force users to download the entire document first before displaying a chosen page. However, users often want to jump to individual pages of the document without waiting for the entire document to download. Efficient browsing requires efficient random page access, fast sequential page flipping, and quick rendering. This can be achieved with a combination of advanced compression, pre-fetching, pre-decoding, caching, and progressive rendering. DjVu decomposes each page into multiple components (text, backgrounds, images, libraries of common shapes…) that may be shared by several pages and downloaded on demand. This allows a suitably designed DjVu-viewing application to handle on-demand downloading, pre-fetching, decoding, caching, and progressive rendering of the page images.</p>
 </section><!-- 1 -->
 
 <section id="2">
@@ -54,7 +63,6 @@ This is a transcription, with minor orthographic and stylistic changes, of the o
 <p>There are problems inherent to storing multiple pages in a single file. A viewer may not be able to utilize a byte-serving mechanism such as that available in HTTP/1.1. Therefore any request for any page of such a file will necessarily result in the entire document being transmitted. Furthermore, a reasonable work pattern is to read the first few pages (perhaps a table of contents) and then navigate to a page much further into the document. However, in such a file, data for page 100 can not be viewed until after data for pages 1–99 have been downloaded.</p>
 <p>Indirect multi-page documents address these problems. Such a document is composed of several files. The main file is named the index file. You can view document using the URL of the index file, just like you do with a bundled multi-page document. However, the index file is very small. It simply contains the document directory and the URLs of secondary files containing the page data. When you view an indirect multi-page document, the viewer only needs to download the files corresponding to the pages you are viewing.</p>
 </section><!-- 3.2.2 -->
-
 </section><!-- 3.2 -->
 
 <section id="3.3">
@@ -62,7 +70,7 @@ This is a transcription, with minor orthographic and stylistic changes, of the o
 
 <section id="3.3.1">
 <h4>3.3.1 Annotations</h4>
-<p>Every DjVu image optionally includes several different kinds of annotations. These annotations are often used to define hyperlinks to other documentpages or to arbitrary web pages. They can also be used for other purposes such as setting the initial viewing mode of a page and defining highlighted zones.</p>
+<p>Every DjVu image optionally includes several different kinds of annotations. These annotations are often used to define hyperlinks to other document pages or to arbitrary Web pages. They can also be used for other purposes such as setting the initial viewing mode of a page and defining highlighted zones.</p>
 </section><!-- 3.3.1 -->
 
 <section id="3.3.2">
@@ -74,18 +82,35 @@ This is a transcription, with minor orthographic and stylistic changes, of the o
 <h4>3.3.3 Thumbnails</h4>
 <p>DjVu documents sometimes contain pre-computed page thumbnails. These allow a viewer to display a graphical representation of many pages by downloading a very small “thumbnail” file instead of the actual pages themselves.</p>
 </section><!-- 3.3.3 -->
-
 </section><!-- 3.3 -->
-
 </section><!-- 3 -->
 
 <section id="4">
 <h2>4 What’s new in the DjVu file format</h2>
+<p>Since the last update to the file format documentation, <a href="#6.1">Reference 1</a>, the file format has been extended to include:</p>
+<dl>
+
+<dt>Multi-page formats</dt>
+<dd>DjVu documents can span more than one page. There are two multi-page formats available: bundled (single file) and indirect (separate file for each page). See §<a href="#3.2">3.2</a> and §<a href="#7.2">7.2</a>.</dd>
+
+<dt>Annotations</dt>
+<dd>Both initial viewing parameters (background color, initial zoom) and overlayed annotations (hyperlinks, text boxes) can be specified either at the document level (“shared”) or at the page level. See §<a href="#8.3.4">8.3.4</a>.</dd>
+
+<dt>Hidden text</dt>
+<dd>Text and the associated layout information can be stored with each image. This allows documents to be searched and indexed. See §<a href="#8.3.5">8.3.5</a>.</dd>
+
+<dt>Document outline</dt>
+<dd>A hierarchical outline can be specified at the document level. This allows the document to present an integrated outline for overview and navigation. See §<a href="#8.3.2">8.3.2</a>.</dd>
+
+<dt>Colorized JB2</dt>
+<dd>A palettized extension is provided for the bitonal encoder. See §<a href="#8.3.10">8.3.10</a>.</dd>
+
+</dl>
 </section><!-- 4 -->
 
 <section id="5">
 <h2>5 Acknowledgements</h2>
-<p>This work is significantly based on Reference 1 and the summary of file format changes described in the DjVuLibre project maintained by Leon Bottou and others.</p>
+<p>This work is significantly based on <a href="#6.1">Reference 1</a> and the summary of file format changes described in the DjVuLibre project maintained by Leon Bottou and others.</p>
 </section><!-- 5 -->
 
 <section id="6">
@@ -126,11 +151,91 @@ This is a transcription, with minor orthographic and stylistic changes, of the o
 <h3>6.7 DjVuLibre</h3>
 <p>An open-source reference implementation of this file format specification is available at <a class="bare" href="http://sourceforge.net/projects/djvu/">http://sourceforge.net/projects/djvu/</a>. Throughout this specification, there are numerous references to source files in this implementation.</p>
 </section><!-- 6.7 -->
-
 </section><!-- 6 -->
 
 <section id="7">
 <h2>7 Component pieces (IFF chunks) of DjVu documents and images</h2>
+
+<p>This section describes the DjVu file format at a middle level. This includes types of chunks which can go into various types of documents but not a detailed layout of the contents of those chunks.</p>
+<p>DjVu documents are IFF85 files (see <a href="#6.2">Reference 2</a> for details). The IFF85 structure probides a hierarchy of containers which hold various types of information in a DjVu file. The containers are called “chunks”. How the chunk is used (what it holds) can be determined by its “chunk type” or “chunk ID”. For example, the list of files contained in a multi-page document is held in the <span class="ck">DIRM</span> (“directory”) chunk; annotations are held in a <span class="ck">ANTz</span> chunk.</p>
+<p><span class="ck">FORM</span> chunks are composite (contain other chunks). Their specific use is exposed by a secondary chunk ID. For example, a single page consists of several different chunks all contained within a single <span class="ck">FORM:DJVU</span> chunk. A multi-page document consists of several pages (and other chunks) all contained in a <span class="ck">FORM:DJVM</span> chunk.</p>
+<p>This section discusses the various kinds of DjVu documents and the corresponding chunks of which they consist.</p>
+
+<section id="7.1">
+<h3>7.1 Single-page documents</h3>
+
+<p>A single-page document is composed of a single <span class="ck">FORM:DVJU</span> composite chunk. This composite chunk always begins with one <span class="ck">INFO</span> chunk describing the image size, resolution and related information (see §<a href="#8.3.11">8.3.11</a>). The document contains exactly one DjVu image, whose content varies as described below.</p>
+
+<section id="7.1.1">
+<h4>7.1.1 Photo DjVu image</h4>
+<p>Photo DjVu image files are best used for encoding photographic images in colors or in shades of gray. The data compression model relies on the IW44 wavelet representation. This format is designed such that the IW44 decoder is able to quickly perform progressive rendering of any image segment using only a small amount of memory. One or more additional <span class="ck">BG44</span> chunks contain the image data encoded with the IW44 representation. The image size specified in the <span class="ck">INFO</span> chunk and the image size specified in the IW44 data must be equal.</p>
+</section><!-- 7.1.1 -->
+
+<section id="7.1.2">
+<h4>7.1.2 Bi-level DjVu image</h4>
+<p>Bi-level DjVu image files are used to compress black and white images representing text and simple drawings. The JB2 data compression model uses the soft pattern-matching technique, which essentially consists of encoding each character by describing how it differs from a well-chosen already-encoded character. A <span class="ck">Sjbz</span> chunk contains the bi-level data encoded with the JB2 representation (see <a href="#11">Appendix 2</a>). The image size specified in the <span class="ck">INFO</span> chunk and the image size specified in the JB2 data must be equal.</p>
+</section><!-- 7.1.2 -->
+
+<section id="7.1.3">
+<h4>7.1.3 Compound DjVu image</h4>
+<p>Compound DjVu image files are an extremely efficient way to compress high-resolution compound document images containing both images and text, such as a page of a magazine. Compound DjVu files represent the document image using two layers. The <i>background layer</i> is used for encoding the pictures and the paper texture.</p>
+<p>The <i>foreground layer</i> is used for encoding the text and the drawings. Additional chunks hold the components of either the foreground or the background layers.</p>
+<p>The main component of the foreground layer is a bi-level image named the <i>foreground mask</i>. The pixel size of the foreground mask is equal to the size of the DjVu image. It contains a black-on-white representation of the text and the drawings. This image is encoded by a <span class="ck">Sjbz</span> chunk using the JB2 representation. There may also be a companion chunk <span class="ck">Djbz</span> containing a <i>shape dictionary</i> that defines bi-level shapes referenced by the <span class="ck">Sjbz</span> chunk.</p>
+
+<section id="7.1.3.1">
+<h5>7.1.3.1 Foreground encoding</h5>
+<p>The foreground colors can be encoded according to two models:</p>
+<ul>
+<li>Using a small color image, the <i>foreground color image</i>, encoded as a single <span class="ck">FG44</span> chunk using the IW44 representation (see <a class="filename" href="https://sourceforge.net/p/djvu/djvulibre-git/ci/master/tree/libdjvu/IW44Image.h">IW44Image.h</a>).</li>
+<li>By specifying one solid color per object described by the JB2-encoded mask. These <i>JB2 colors</i> are color-quantized and stored in a single <span class="ck">FGbz</span> chunk (see §<a href="#6.3.10">6.3.10</a>). Such compound DjVu images are rendered by painting each foreground object on top of the background color image using the solid color specified by the <span class="ck">FGbz</span> chunk.</li>
+</ul>
+</section><!-- 7.1.3.1 -->
+
+<section id="7.1.3.2">
+<h5>7.1.3.2 Background encoding</h5>
+<p>The background layer is a color image, the <i>background color image</i>, encoded by an arbitrary number of <span class="ck">BG44</span> chunks containing successive IW44 refinements (see <a href="#10">Appendix 1</a>). The size of this image is computed by rounding up the quotient of the mask size by an integer sub-sampling factor ranging from 1 to 12. Most compound DjVu images use a background sub-sampling factor equal to 3. Smaller sub-sampling factors are adequate for images with a very rich paper texture. Larger sub-sampling factors are adequate for images containing no pictures.</p>
+<p>There are no ordering or interleaving constraints on these chunks except that (a) the <span class="ck">INFO</span> chunk must appear first, and (b) the successive <span class="ck">BG44</span> refinements must appear with their natural order. The chunk order simply affects the progressive rendering of DjVu images in a web browser.</p>
+</section><!-- 7.1.3.2 -->
+
+<section id="7.1.3.3">
+<h5>7.1.3.3 Alternative encodings</h5>
+<p>Besides the JB2 and IW44 encoding schemes, the DjVu format supports alternative encdoding methods for its components.</p>
+<p>The foreground mask may be represented by a single <span class="ck">Smmr</span> chunk instead of <span class="ck">Sjbz</span>. The <span class="ck">Smmr</span> chunk contains a bi-level image encoded with the Fax-G4/MMR method. Although the resulting files are typically six times larger, this capability can be useful when DjVu is used as a front-end for fax machines and scanners with embedded Fax-G4/MMR capabilities.</p>
+<p>The background color image may be represented by a single <span class="ck">BGjp</span> chunk instead of several <span class="ck">BG44</span> chunks. The <span class="ck">BGjp</span> chunk contains a JPEG-encoded color image (see <a class="filename" href="https://sourceforge.net/p/djvu/djvulibre-git/ci/master/tree/libdjvu/JPEGDecoder.cpp">JPEGDecoder.cpp</a>). The resulting files are significantly larger and lack the progressivity of the usual DjVu files. This is useful because some scanners have embedded JPEG capabilities.</p>
+<p>The foreground color image may be represented by a single <span class="ck">FGjp</span> chunk instead of a single <span class="ck">FG44</span> chunk. This is useful because some scanners have embedded JPEG capabilities.</p>
+</section><!-- 7.1.3.3 -->
+
+<section id="7.1.3.4">
+<h5>7.1.3.4 Annotations and textual information</h5>
+<p>All types of DjVu images may contain annotation chunks. Annotation chunks are used to describe hyperlinks, to specify more viewer settings (page background, initial zoom, etc.), and to hold metadata information. Annotations are contained in <span class="ck">ANTa</span> or <span class="ck">ANTz</span> chunks.</p>
+<p>All types of DjVu image files may also contain a computer-readable description of the text appearing on the page. This information is contained in either a <span class="ck">TXTa</span> chunk or a <span class="ck">TXTz</span> chunk.</p>
+</section><!-- 7.1.3.4 -->
+</section><!-- 7.1.3 -->
+</section><!-- 7.1 -->
+
+<section id="7.2">
+<h3>7.2 Multi-page documents</h3>
+<p>A multi-page document is composed of a <span class="ck">FORM:DJVM</span> whose first chunk is a <span class="ck">DIRM</span> chunk containing the <i>document directory</i>. This directory lists all component files composing the given document, helps to access every component file and identifies the pages of the document.</p>
+<p>In a <i>bundled</i> multi-page file, the component files are stored immediately after the <span class="ck">DIRM</span> chunk, within the <span class="ck">FORM:DJVM</span> composite chunk.</p>
+<p>In an <i>indirect</i> multi-page file, the component files are stored in different files whose URLs are composed using information stored in the <span class="ck">DIRM</span> chunk.</p>
+
+<section id="7.2.1">
+<h4>7.2.1 Component files</h4>
+<p>A multi-page DjVu document necessarily references other <span class="ck">FORM</span> (composite) chunks. Specifically:</p>
+<ul>
+<li>Each page is a single-page document (<span class="ck">FORM:DJVU</span> chunk).</li>
+<li>Embedded thumbnails (if any) are contained in one or more <span class="ck">FORM:THUM</span> chunks.</li>
+<li>Shared annotations (if any) and shape dictionaries (if any) are contained in one or more <span class="ck">FORM:DJVI</span> chunks.</li>
+</ul>
+<p>Each of these composite chunks (<span class="ck">FORM:DJVU</span>, <span class="ck">FORM:THUM</span>, <span class="ck">FORM:DJVI</span>) is a well-formed IFF bytestream in its own right and can be held in a separate disk file. In the context of a multi-page — either bundled or indirect — document, we refer to these composite chunks as <i>component files</i>.</p>
+</section><!-- 7.2.1 -->
+
+<section id="7.2.2">
+<h4>7.2.2 Including shared information</h4>
+<p>In many cases, efficiencies can be achieved by sharing JB2 shape definitions and/or annotations across pages. To facilitate this, any DjVu image file contained in a multi-page file may contain an <span class="ck">INCL</span> chunk containing the ID of a shared component file. The decoder processes the chunks contained in the shared component file as if the DjVu image file contained them. All relevant pages include this shared component file. Although they appear in several pages, these shared shapes are encoded only once in the document.</p>
+<p>A shared component file is composed of a single <span class="ck">FORM:DJVI</span> potentially containing any information otherwise allowed in a DjVu image file (except for the <span class="ck">INFO</span> chunk of course).</p>
+</section><!-- 7.2.2 -->
+</section><!-- 7.2 -->
 </section><!-- 7 -->
 
 <section id="8">
@@ -287,7 +392,6 @@ This is a transcription, with minor orthographic and stylistic changes, of the o
 </tbody>
 </table>
 </section><!-- 8.2.2 -->
-
 </section><!-- 8.2 -->
 
 <section id="8.3">
@@ -350,16 +454,13 @@ This is a transcription, with minor orthographic and stylistic changes, of the o
 <!-- TODO -->
 </pre>
 </section><!-- 8.3.1.4 -->
-
 </section><!-- 8.3.1 -->
 
 <section id="8.3.2">
 <h4>8.3.2 Directory chunk: <span class="ck">DIRM</span></h4>
 <p></p>
 </section><!-- 8.3.2 -->
-
 </section><!-- 8.3 -->
-
 </section><!-- 8 -->
 
 <section id="9">
@@ -536,7 +637,6 @@ so an MPS will trigger an update of the probability state index. All probability
 <dd>The least significant bit of <var>C</var> is filled with the next bit from the input stream. Bits are taken from each octet in the input stream most significant bit first.</dd>
 </dl>
 </section><!-- 12.3.1 -->
-
 </section><!-- 12.3 -->
 
 <section id="12.4">
@@ -580,9 +680,7 @@ so an MPS will trigger an update of the probability state index. All probability
 <dd>The least significant bit of <var>C</var> is filled with the next bit from the input stream. Bits are taken from each octet in the input stream most significant bit first.</dd>
 </dl>
 </section><!-- 12.4.1 -->
-
 </section><!-- 12.4 -->
-
 </section><!-- 12 -->
 
 <section id="13">
@@ -626,7 +724,7 @@ so an MPS will trigger an update of the probability state index. All probability
 <section id="13.2.2.2">
 <h5>13.2.2.2 MTF array reordering</h5>
 <p>The MTF array contains 256 bytes initialized with the identity mapping, that is <code>MTF[0] = 0</code>, <code>MTF[1] = 1</code>, … , <code>MTF[255] = 255</code>.</p>
-<p>Whenever one decodes a number <code>MTFNO</code>, the corresponding symbol to store in the Burrows–Wheeler buffer is <code>MTF[MTFNO]</code> (except for the <code>&langle;EOB&rangle;</code> symbol — see §<a href="#13.2.2.3">13.2.2.3</a>) and the contents of the MTF array are rotated. The rotation moves the symbol that was at position <code>MTF[MTFNO]</code> to a position <code>M</code> that can be 0, 1, 2, or 3. Meanwhile the symbols <code>MTF[M]</code> to <code>MTF[MTFNO - 1]</code> are moved to positions <code>M + 1</code> to <code>MTFNO</code>.</p>
+<p>Whenever one decodes a number <code>MTFNO</code>, the corresponding symbol to store in the Burrows–Wheeler buffer is <code>MTF[MTFNO]</code> (except for the <code>&langle;EOB&rangle;</code> symbol — see §<a href="#13.2.2.3">13.2.2.3</a>) and the contents of the MTF array are rotated. The rotation moves the symbol that was at position <code>MTF[MTFNO]</code><!-- FIXME --> to a position <code>M</code> that can be 0, 1, 2, or 3. Meanwhile the symbols <code>MTF[M]</code> to <code>MTF[MTFNO - 1]</code> are moved to positions <code>M + 1</code> to <code>MTFNO</code>.</p>
 <p>The position <code>M</code> is chosen using an estimate of the frequency of the symbol <code>MTF[MTFNO]</code>. One strives to position the most frequent symbols at the beginning of the MTF array. To that end, one maintains an array <code>FREQ[0..3]</code> that contains numbers representative of the instantaneous frequencies of the symbols <code>MTF[0..3]</code>.</p>
 <p>Of course this array must also be “rotated” when the rotation of the MTF array affects its first four elements.</p>
 <p>Consider the frequency
