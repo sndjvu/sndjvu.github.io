@@ -8,11 +8,13 @@
 #about { margin: 0 auto; max-width: 65%; border: 1px solid black; font-size: larger; padding: 1rem; background-color: pink; }
 a.bare, .filename { font-family: sans-serif; }
 .hex, .ck { font-family: monospace; }
+pre .filename { font-size: smaller; }
+table td:nth-child(1) { vertical-align: top; }
 </style>
 </head>
 <body>
 <div id="about">
-This is a transcription, with minor orthographic and stylistic changes, of the official <a href="http://djvu.org/docs/DjVu3Spec.djvu">Celartem/Lizardtech DjVu Reference, version 3</a>.
+This is an unofficial transcription, with minor orthographic and stylistic changes, of the <a href="http://djvu.org/docs/DjVu3Spec.djvu">Celartem/Lizardtech DjVu Reference, version 3</a>. Official information about DjVu is available at <a href="http://djvu.org">djvu.org</a>.
 </div>
 
 <h1>DjVu Reference</h1>
@@ -451,15 +453,195 @@ This is a transcription, with minor orthographic and stylistic changes, of the o
 <p>Pre-rendered thumbnails may be included. This allows very large documents to render thumbnails of pages without downloading and decoding them. <span class="ck">FORM:THUM</span> chunks contain several <span class="ck">TH44</span> chunks. Each of these chunks contains the thumbnails of the pages that follow.</p>
 <p>Example:</p>
 <pre>
-<!-- TODO -->
+<span class="ck">FORM:DJVM</span> [2272012 bytes]
+  <span class="ck">DIRM</span> [108 bytes] Document directory (bundled, 7 files, 4 pages)
+  <span class="ck">FORM:THUM</span> [5960 bytes] <span class="filename">p0001.thumb</span>
+    <span class="ck">TH44</span> [5984 bytes] Thumbnail icon for page 1
+  <span class="ck">FORM:DJVU</span> [1413380 bytes] <span class=filename">p0001.djvu</span>
+    <span class="ck">INFO</span> [10 bytes] 4728 × 6300, version 25, 600 dpi, gamma = 2.2
+    …
+  <span class="ck">FORM:THUM</span> [12148 bytes] <span class="filename">p0004.thumb</span>
+    <span class="ck">TH44</span> [3418 bytes] Thumbnail icon for page 2
+    <span class="ck">TH44</span> [4150 bytes] Thumbnail icon for page 3
+    <span class="ck">TH44</span> [4552 bytes] Thumbnail icon for page 4
+  <span class="ck">FORM:DJVU</span> [777858 bytes] <span class="filename">p0002.djvu</span>
+    …
 </pre>
 </section><!-- 8.3.1.4 -->
 </section><!-- 8.3.1 -->
 
 <section id="8.3.2">
 <h4>8.3.2 Directory chunk: <span class="ck">DIRM</span></h4>
-<p></p>
+<p>As described in §<a href="#7.2">7.2</a>, a multi-page document will contain “component files” such as individual pages (<span class="ck">FORM:DJVU</span>) or shared annotations (<span class="ck">FORM:DJVI</span>).</p>
+<p>The first contained chunk in a <span class="ck">FORM:DJVM</span> composite chunk is the <span class="ck">DIRM</span> chunk containing the <i>document directory</i>. It contains information the decoder will need to access the component files (see §<a href="#7.2">7.2</a>).</p>
+
+<section id="8.3.2.1">
+<h5>8.3.2.1 Unencoded data</h5>
+<p>The first part of the <span class="ck">DIRM</span> chunk is unencoded:</p>
+<table>
+<tr>
+  <td><code>BYTE</code></td>
+  <td><p>Bit 7 (the MSB) is the <i>bundled</i> flag: 1 for bundled, 0 for indirect.</p>
+  <p>Bits 6 through 0 are the version, currently 1.</p></td>
+</tr>
+<tr>
+  <td><code>BE16</code></td>
+  <td>Number of component files.</td>
+</tr>
+<tr>
+  <td><code>BE32[]</code></td>
+  <td><p>When the document is a bundled document (i.e.&nbsp;the flag <var>bundled</var> is set), the header above is followed by the offsets of each of the component files within the <span class="ck">FORM:DJVM</span>. These offsets allow for random component file access.</p>
+  <p>When the document is indirect, these offsets are omitted.</p></td>
+</tr>
+</table>
+</section><!-- 8.3.2.1 -->
+
+<section id="8.3.2.2">
+<h5>8.3.2.2 BZZ-encoded data</h5>
+<p>The rest of the chunk is entirely compressed with the BZZ general-purpose compressor. We describe now the data fed into (or retrieved from) the BZZ codec (see <a class="filename" href="https://sourceforge.net/p/djvu/djvulibre-git/ci/master/tree/libdjvu/BSByteStream.cpp">BSByteStream.cpp</a> and <a href="#13">Appendix 4</a>).</p>
+<table>
+<tr>
+  <td><code>BE24[]</code></td>
+  <td>Size of each component file. May be 0 for indirect documents.</td>
+</tr>
+<tr>
+  <td><code>BYTE[]</code></td>
+  <td>Flag byte for each component file.<!-- TODO --></td>
+</tr>
+<tr>
+  <td><code>ZSTR[]</code></td>
+  <td>There are one to three zero-terminated strings per component file. The first string contains the ID of the component file. If <var>hasname</var> is set then there is a second string which contains the name of the component file (in the case of an indirect file, this is the disk filename). If <var>hastitle</var> is set, then there is a sthird string which contains the name of the component (for display — for example, alternate page numberings in the Foreword or Preface).</td>
+</tr>
+</table>
+<p>Examples:</p>
+
+<figure><!-- TODO -->
+<pre>
+81
+00 03
+00 00 00 54
+00 00 0e 02
+00 01 cf 52
+
+00 0d ad
+01 c1 50
+00 1e c5
+00
+01
+01
+64 69 63 74 30 30 30 32 2e 69 66 66 00
+70 30 30 30 31 2e 64 6a 76 75 00
+70 30 30 30 32 2e 64 6a 76 75 00
+</pre>
+<figcaption></figcaption>
+</figure>
+
+<figure><!-- TODO -->
+<pre>
+01
+00 03
+
+00 0d ad
+01 c1 50
+00 1e c5
+00
+01
+01
+64 69 63 74 30 30 30 32 2e 69 66 66 00
+70 30 30 30 31 2e 64 6a 76 75 00
+70 30 30 30 32 2e 64 6a 76 75 00
+</pre>
+</figure>
+<figcaption></figcaption>
+</section><!-- 8.3.2.2 -->
 </section><!-- 8.3.2 -->
+
+<section id="8.3.3">
+<h4>8.3.3 Document outline chunk: <span class="ck">NAVM</span></h4>
+<p>The <span class="ck">NAVM</span> chunk contains bookmarks which describe an outline of the document. The intent is to allow content authors to create an electronic table of contents which gives users rapid access to various parts of the document.</p>
+<p>This chunk is optional, but, if present, must immediately follow the <span class="ck">DIRM</span> chunk.</p>
+<p>The entire chunk is BZZ-encoded and starts with a single field specifying the total number of bookmark records:</p>
+<table>
+<tr>
+  <td><code>BE16</code></td>
+  <td>The total number of bookmarks in the document.</td>
+</tr>
+</table>
+<p>And then the individual bookmark records, nested as necessary:</p>
+<table>
+<tr>
+  <td><code>BYTE</code></td>
+  <td>The number of immediate child bookmark records.</td>
+</tr>
+<tr>
+  <td><code>BE24</code></td>
+  <td>Size of the description text.</td>
+</tr>
+<tr>
+  <td><code>STR</code></td>
+  <td>The description text.</td>
+</tr>
+<tr>
+  <td><code>BE24</code></td>
+  <td>Size of the URL text.</td>
+</tr>
+<tr>
+  <td><code>STR</code></td>
+  <td>The URL text. This may (and typically does) use the syntax desribed for the URLs in the <span class="ck">ANTa</span> chunk (and similarly, is not URL-encoded).</td>
+</tr>
+</table>
+<p>Example (as passed to the BZZ codec):</p>
+<p>Consider a small document outline as follows:</p>
+<!-- TODO -->
+<p>There is no hyperlink associated with the single root entry "Table of Contents". At a binary level, the chunk looks like this:
+<table><!-- TODO -->
+</table>
+</section><!-- 8.3.3 -->
+
+<section id="8.3.4">
+<h4>8.3.4 Annotation chunk: <span class="ck">ANTa</span>, <span class="ck">ANTz</span></h4>
+<p>Annotations are contained in <span class="ck">ANTa</span> or <span class="ck">ANTz</span> chunks. The <span class="ck">ANTa</span> chunks contain the annotation in plain text. The <span class="ck">ANTz</span> chunks contain the same information compressed with the BZZ encoder (see <a class="filename" href="https://sourceforge.net/p/djvu/djvulibre-git/ci/master/tree/libdjvu/BSByteStream.h">BSByteStream.h</a>).</p>
+<p>The use of the <span class="ck">ANTa</span> chunk is discouraged.</p>
+<p>Pages can share annotations using an <span class="ck">INCL</span> chunk as explained in §<a href="#7.2.2">7.2.2</a>. The complete annotation text is obtained by concatenating all annotation chunks present in the page. A restriction of the current reference library implementation limits the number of shared annotation files to one.</p>
+<p>The syntax of the annotation text uses a simple parenthesized notation. All text is standard UTF-8.</p>
+
+<section id="8.3.4.1">
+<h5>8.3.4.1 Initial document view</h5>
+
+<section id="8.3.4.1.1">
+<h6>8.3.4.1.1 Background color</h6>
+</section><!-- 8.3.4.1.1 -->
+
+<section id="8.3.4.1.2">
+<h6>8.3.4.1.2 Initial zoom</h6>
+</section><!-- 8.3.4.1.2 -->
+
+<section id="8.3.4.1.3">
+<h6>8.3.4.1.3 Initial display level</h6>
+</section><!-- 8.3.4.1.3 -->
+
+<section id="8.3.4.1.4">
+<h6>8.3.4.1.4 Alignment</h6>
+</section><!-- 8.3.4.1.4 -->
+</section><!-- 8.3.4.1 -->
+
+<section id="8.3.4.2">
+<h5>8.3.4.2 Maparea (overprinted annotations)</h5>
+
+<section id="8.3.4.2.1">
+<h6>8.3.4.2.1 <var>url</var></h6>
+</section><!-- 8.3.4.2.1 -->
+
+<section id="8.3.4.2.2">
+<h6>8.3.4.2.2 <var>comment</var></h6>
+</section><!-- 8.3.4.2.2 -->
+
+<section id="8.3.4.2.3">
+<h6>8.3.4.2.3 <var>area</var></h6>
+</section><!-- 8.3.4.2.3 -->
+</section><!-- 8.3.4.2 -->
+
+</section><!-- 8.3.4 -->
 </section><!-- 8.3 -->
 </section><!-- 8 -->
 
