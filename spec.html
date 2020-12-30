@@ -36,7 +36,7 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 
 <section id="2">
 <h2>2 Document organization</h2>
-<p>This document describes the DjVu file format. It is written “from top down”, providing first a high-level understand ing of the features and techniques used in DjVu (see §<a href="#3">3</a>), then a mid-level view at the IFF85 level (see §<a href="#7">7</a>), and finally a very detailed decription of the underlying algorithms and and byte-by-byte makeup of DjVu files (see §<a href="#8">8</a>).</p>
+<p>This document describes the DjVu file format. It is written “from top down”, providing first a high-level understanding of the features and techniques used in DjVu (see §<a href="#3">3</a>), then a mid-level view at the IFF85 level (see §<a href="#7">7</a>), and finally a very detailed decription of the underlying algorithms and and byte-by-byte makeup of DjVu files (see §<a href="#8">8</a>).</p>
 </section><!-- 2 -->
 
 <section id="3">
@@ -407,7 +407,7 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 <h5>8.3.1.1 <span class="ck">FORM:DJVM</span></h5>
 <p>As discussed in §<a href="#7.2">7.2</a>, a multi-page DjVu document is composed of a single (composite) <span class="ck">FORM:DJVM</span> chunk. The first nested chunk is always a <span class="ck">DIRM</span> chunk containing the document directory (see <a class="filename" href="https://sourceforge.net/p/djvu/djvulibre-git/ci/master/tree/libdjvu/DjVmDir.cpp">DjVmDir.h</a>), which represents the list of the component files that make up the document. An optional <span class="ck">NAVM</span> chunk, which describes the outline of the document, may follow the <span class="ck">DIRM</span> chunk.</p>
 <p>Example:</p>
-<pre>
+<pre style="overflow:auto">
 <span class="ck">FORM:DJVM</span> [126475 bytes]
   <span class="ck">DIRM</span> [59 bytes] Document directory (bundled, 3 files, 2 pages)
   <span class="ck">FORM:DJVI</span> [3493 bytes] <span class="filename">dict0002.iff</span>
@@ -420,7 +420,7 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 <h5>8.3.1.2 <span class="ck">FORM:DJVU</span></h5>
 <p>As discussed in §<a href="7.1">7.1</a>, a single page in a DjVu document is contained in a single (composite) <span class="ck">FORM:DJVU</span> chunk. The nested first chunk must be the <span class="ck">INFO</span> chunk. The chunks after the <span class="ck">INFO</span> chunk may occur in any order, although the order of the <span class="ck">BG44</span> chunks, if there is more than one, is significant.</p>
 <p>Example:</p>
-<pre>
+<pre style="overflow:auto">
 <span class="ck">FORM:DJVU</span> [26790 bytes]
   <span class="ck">INFO</span> [10 bytes] 2202 × 967, version 26, 300 dpi, gamma = 2.2
   <span class="ck">Sjbz</span> [13133 bytes] JB2 bilevel data
@@ -436,7 +436,7 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 <h5>8.3.1.3 <span class="ck">FORM:DJVI</span></h5>
 <p>Multi-page DjVu documents can share information between pages by nesting a chunk inside a <span class="ck">FORM:DJVI</span> chunk (which is itself held inside the <span class="ck">FORM:DJVM</span> chunk) and referencing the contained chunk from within a page. Individual pages reference the shared chunks via the <span class="ck">INCL</span> chunk.</p>
 <p>Example:</p>
-<pre>
+<pre style="overflow:auto">
 <span class="ck">FORM:DJVM</span> [126475 bytes]
   <span class="ck">DIRM</span> [59 bytes] Document directory (bundled, 3 files, 2 pages)
   <strong><span class="ck">FORM:DJVI</span> [3493 bytes] <span class="filename">dict0002.iff</span></strong>
@@ -452,7 +452,7 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 <h5>8.3.1.4 <span class="ck">FORM:THUM</span></h5>
 <p>Pre-rendered thumbnails may be included. This allows very large documents to render thumbnails of pages without downloading and decoding them. <span class="ck">FORM:THUM</span> chunks contain several <span class="ck">TH44</span> chunks. Each of these chunks contains the thumbnails of the pages that follow.</p>
 <p>Example:</p>
-<pre>
+<pre style="overflow:auto">
 <span class="ck">FORM:DJVM</span> [2272012 bytes]
   <span class="ck">DIRM</span> [108 bytes] Document directory (bundled, 7 files, 4 pages)
   <span class="ck">FORM:THUM</span> [5960 bytes] <span class="filename">p0001.thumb</span>
