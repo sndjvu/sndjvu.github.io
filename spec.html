@@ -6,8 +6,10 @@
 <title>DjVu Reference</title>
 <style>
 #about { margin: 0 auto; max-width: 65%; border: 1px solid black; font-size: larger; padding: 1rem; background-color: pink; }
+.hex, .ck, .ty { font-family: monospace; }
+.ty { text-decoration: underline dotted; }
 a.bare, .filename { font-family: sans-serif; }
-.hex, .ck { font-family: monospace; }
+dt { font-style: italic; }
 table.hoist td:nth-child(1) { vertical-align: top; }
 </style>
 </head>
@@ -44,7 +46,7 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 
 <section id="3.1">
 <h3><a href="#3.1">3.1</a> DjVu images</h3>
-<p>The principal imaging model used in DjVu is the “Mixed Raster Content” (MRC) model described in <a href="https://www.itu.int/rec/T-REC-T.44-200501-I/en">ITU-T Recommendation T.44</a>, <a href="https://www.iso.org/standard/32228.html">ISO/IEC 16485</a>. In this model, an image is decomposed into foreground and background layers. To select whether a particular pixel comes from the foreground or background, a bitonal “selection” or “mask” layer is provided. These three layers are compressed separately using techniques which are optimized for each type of data.</p>
+<p>The principal imaging model used in DjVu is the “Mixed Raster Content” (MRC) model described in <a href="https://www.itu.int/rec/T-REC-T.44">ITU-T Recommendation T.44</a>, <a href="https://www.iso.org/standard/32228.html">ISO/IEC 16485</a>. In this model, an image is decomposed into foreground and background layers. To select whether a particular pixel comes from the foreground or background, a bitonal “selection” or “mask” layer is provided. These three layers are compressed separately using techniques which are optimized for each type of data.</p>
 <p>The foreground and background layers are compressed using a wavelet-based continuous-tone image compression technique known as “IW44”.</p>
 <p>The mask layer is compressed using a bitonal image compression technique that takes advantage of repetitions of nearly identical shapes on the page (such as characters) to efficiently compress text images.</p>
 <p>A DjVu image need not contain all three layers and alternative compression techniques are available for each layer.</p>
@@ -55,12 +57,12 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 <p>DjVu documents can be single- or multi-page. Each page consists of a DjVu image as described above (photo, bitonal, or an MRC-based composition). Such a page, by itself, is a valid DjVu document. Multi-page documents can take either of two forms: bundled or indirect.</p>
 
 <section id="3.2.1">
-<h4>3.2.1 Bundled multi-page documents</h4>
+<h4><a href="#3.2.1">3.2.1</a> Bundled multi-page documents</h4>
 <p>A bundled multi-page DjVu document uses a single file to represent the entire document. This single file contains all the pages as well as ancillary information (e.g.&nbsp;the page directory, data shared by several pages, thumbnails, etc.). Using a single-file format is very convenient for storing documents or for sending email attachments.</p>
 </section><!-- 3.2.1 -->
 
 <section id="3.2.2">
-<h4>3.2.2 Indirect multi-page documents</h4>
+<h4><a href="#3.2.2">3.2.2</a> Indirect multi-page documents</h4>
 <p>There are problems inherent to storing multiple pages in a single file. A viewer may not be able to utilize a byte-serving mechanism such as that available in HTTP/1.1. Therefore any request for any page of such a file will necessarily result in the entire document being transmitted. Furthermore, a reasonable work pattern is to read the first few pages (perhaps a table of contents) and then navigate to a page much further into the document. However, in such a file, data for page 100 can not be viewed until after data for pages 1–99 have been downloaded.</p>
 <p>Indirect multi-page documents address these problems. Such a document is composed of several files. The main file is named the index file. You can view document using the URL of the index file, just like you do with a bundled multi-page document. However, the index file is very small. It simply contains the document directory and the URLs of secondary files containing the page data. When you view an indirect multi-page document, the viewer only needs to download the files corresponding to the pages you are viewing.</p>
 </section><!-- 3.2.2 -->
@@ -70,17 +72,17 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 <h3><a href="#3.3">3.3</a> Non-raster data</h3>
 
 <section id="3.3.1">
-<h4>3.3.1 Annotations</h4>
+<h4><a href="#3.3.1">3.3.1</a> Annotations</h4>
 <p>Every DjVu image optionally includes several different kinds of annotations. These annotations are often used to define hyperlinks to other document pages or to arbitrary Web pages. They can also be used for other purposes such as setting the initial viewing mode of a page and defining highlighted zones.</p>
 </section><!-- 3.3.1 -->
 
 <section id="3.3.2">
-<h4>3.3.2 Hidden text</h4>
+<h4><a href="#3.3.2">3.3.2</a> Hidden text</h4>
 <p>Every DjVu image optionally includes a hidden text layer that associates graphical features with the corresponding text. The hidden text layer is usually generated by running optical character recognition software. This textual information provides for indexing DjVu documents and copying/pasting text from DjVu page images.</p>
 </section><!-- 3.3.2 -->
 
 <section id="3.3.3">
-<h4>3.3.3 Thumbnails</h4>
+<h4><a href="#3.3.3">3.3.3</a> Thumbnails</h4>
 <p>DjVu documents sometimes contain pre-computed page thumbnails. These allow a viewer to display a graphical representation of many pages by downloading a very small “thumbnail” file instead of the actual pages themselves.</p>
 </section><!-- 3.3.3 -->
 </section><!-- 3.3 -->
@@ -168,23 +170,23 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 <p>A single-page document is composed of a single <span class="ck">FORM:DVJU</span> composite chunk. This composite chunk always begins with one <span class="ck">INFO</span> chunk describing the image size, resolution and related information (see §<a href="#8.3.11">8.3.11</a>). The document contains exactly one DjVu image, whose content varies as described below.</p>
 
 <section id="7.1.1">
-<h4>7.1.1 Photo DjVu image</h4>
+<h4><a href="#7.1.1">7.1.1</a> Photo DjVu image</h4>
 <p>Photo DjVu image files are best used for encoding photographic images in colors or in shades of gray. The data compression model relies on the IW44 wavelet representation. This format is designed such that the IW44 decoder is able to quickly perform progressive rendering of any image segment using only a small amount of memory. One or more additional <span class="ck">BG44</span> chunks contain the image data encoded with the IW44 representation. The image size specified in the <span class="ck">INFO</span> chunk and the image size specified in the IW44 data must be equal.</p>
 </section><!-- 7.1.1 -->
 
 <section id="7.1.2">
-<h4>7.1.2 Bi-level DjVu image</h4>
+<h4><a href="#7.1.2">7.1.2</a> Bi-level DjVu image</h4>
 <p>Bi-level DjVu image files are used to compress black and white images representing text and simple drawings. The JB2 data compression model uses the soft pattern-matching technique, which essentially consists of encoding each character by describing how it differs from a well-chosen already-encoded character. A <span class="ck">Sjbz</span> chunk contains the bi-level data encoded with the JB2 representation (see <a href="#11">Appendix 2</a>). The image size specified in the <span class="ck">INFO</span> chunk and the image size specified in the JB2 data must be equal.</p>
 </section><!-- 7.1.2 -->
 
 <section id="7.1.3">
-<h4>7.1.3 Compound DjVu image</h4>
+<h4><a href="#7.1.3">7.1.3</a> Compound DjVu image</h4>
 <p>Compound DjVu image files are an extremely efficient way to compress high-resolution compound document images containing both images and text, such as a page of a magazine. Compound DjVu files represent the document image using two layers. The <i>background layer</i> is used for encoding the pictures and the paper texture.</p>
 <p>The <i>foreground layer</i> is used for encoding the text and the drawings. Additional chunks hold the components of either the foreground or the background layers.</p>
 <p>The main component of the foreground layer is a bi-level image named the <i>foreground mask</i>. The pixel size of the foreground mask is equal to the size of the DjVu image. It contains a black-on-white representation of the text and the drawings. This image is encoded by a <span class="ck">Sjbz</span> chunk using the JB2 representation. There may also be a companion chunk <span class="ck">Djbz</span> containing a <i>shape dictionary</i> that defines bi-level shapes referenced by the <span class="ck">Sjbz</span> chunk.</p>
 
 <section id="7.1.3.1">
-<h5>7.1.3.1 Foreground encoding</h5>
+<h5><a href="#7.1.3.1">7.1.3.1</a> Foreground encoding</h5>
 <p>The foreground colors can be encoded according to two models:</p>
 <ul>
 <li>Using a small color image, the <i>foreground color image</i>, encoded as a single <span class="ck">FG44</span> chunk using the IW44 representation (see <a class="filename" href="https://sourceforge.net/p/djvu/djvulibre-git/ci/master/tree/libdjvu/IW44Image.h">IW44Image.h</a>).</li>
@@ -193,13 +195,13 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 </section><!-- 7.1.3.1 -->
 
 <section id="7.1.3.2">
-<h5>7.1.3.2 Background encoding</h5>
+<h5><a href="#7.1.3.2">7.1.3.2</a> Background encoding</h5>
 <p>The background layer is a color image, the <i>background color image</i>, encoded by an arbitrary number of <span class="ck">BG44</span> chunks containing successive IW44 refinements (see <a href="#10">Appendix 1</a>). The size of this image is computed by rounding up the quotient of the mask size by an integer sub-sampling factor ranging from 1 to 12. Most compound DjVu images use a background sub-sampling factor equal to 3. Smaller sub-sampling factors are adequate for images with a very rich paper texture. Larger sub-sampling factors are adequate for images containing no pictures.</p>
 <p>There are no ordering or interleaving constraints on these chunks except that (a) the <span class="ck">INFO</span> chunk must appear first, and (b) the successive <span class="ck">BG44</span> refinements must appear with their natural order. The chunk order simply affects the progressive rendering of DjVu images in a web browser.</p>
 </section><!-- 7.1.3.2 -->
 
 <section id="7.1.3.3">
-<h5>7.1.3.3 Alternative encodings</h5>
+<h5><a href="#7.1.3.3">7.1.3.3</a> Alternative encodings</h5>
 <p>Besides the JB2 and IW44 encoding schemes, the DjVu format supports alternative encdoding methods for its components.</p>
 <p>The foreground mask may be represented by a single <span class="ck">Smmr</span> chunk instead of <span class="ck">Sjbz</span>. The <span class="ck">Smmr</span> chunk contains a bi-level image encoded with the Fax-G4/MMR method. Although the resulting files are typically six times larger, this capability can be useful when DjVu is used as a front-end for fax machines and scanners with embedded Fax-G4/MMR capabilities.</p>
 <p>The background color image may be represented by a single <span class="ck">BGjp</span> chunk instead of several <span class="ck">BG44</span> chunks. The <span class="ck">BGjp</span> chunk contains a JPEG-encoded color image (see <a class="filename" href="https://sourceforge.net/p/djvu/djvulibre-git/ci/master/tree/libdjvu/JPEGDecoder.cpp">JPEGDecoder.cpp</a>). The resulting files are significantly larger and lack the progressivity of the usual DjVu files. This is useful because some scanners have embedded JPEG capabilities.</p>
@@ -207,7 +209,7 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 </section><!-- 7.1.3.3 -->
 
 <section id="7.1.3.4">
-<h5>7.1.3.4 Annotations and textual information</h5>
+<h5><a href="#7.1.3.4">7.1.3.4</a> Annotations and textual information</h5>
 <p>All types of DjVu images may contain annotation chunks. Annotation chunks are used to describe hyperlinks, to specify more viewer settings (page background, initial zoom, etc.), and to hold metadata information. Annotations are contained in <span class="ck">ANTa</span> or <span class="ck">ANTz</span> chunks.</p>
 <p>All types of DjVu image files may also contain a computer-readable description of the text appearing on the page. This information is contained in either a <span class="ck">TXTa</span> chunk or a <span class="ck">TXTz</span> chunk.</p>
 </section><!-- 7.1.3.4 -->
@@ -221,7 +223,7 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 <p>In an <i>indirect</i> multi-page file, the component files are stored in different files whose URLs are composed using information stored in the <span class="ck">DIRM</span> chunk.</p>
 
 <section id="7.2.1">
-<h4>7.2.1 Component files</h4>
+<h4><a href="#7.2.1">7.2.1</a> Component files</h4>
 <p>A multi-page DjVu document necessarily references other <span class="ck">FORM</span> (composite) chunks. Specifically:</p>
 <ul>
 <li>Each page is a single-page document (<span class="ck">FORM:DJVU</span> chunk).</li>
@@ -232,7 +234,7 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 </section><!-- 7.2.1 -->
 
 <section id="7.2.2">
-<h4>7.2.2 Including shared information</h4>
+<h4><a href="#7.2.2">7.2.2</a> Including shared information</h4>
 <p>In many cases, efficiencies can be achieved by sharing JB2 shape definitions and/or annotations across pages. To facilitate this, any DjVu image file contained in a multi-page file may contain an <span class="ck">INCL</span> chunk containing the ID of a shared component file. The decoder processes the chunks contained in the shared component file as if the DjVu image file contained them. All relevant pages include this shared component file. Although they appear in several pages, these shared shapes are encoded only once in the document.</p>
 <p>A shared component file is composed of a single <span class="ck">FORM:DJVI</span> potentially containing any information otherwise allowed in a DjVu image file (except for the <span class="ck">INFO</span> chunk of course).</p>
 </section><!-- 7.2.2 -->
@@ -252,19 +254,19 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 <h3><a href="#8.2">8.2</a> DjVu file structure</h3>
 
 <section id="8.2.1">
-<h4>8.2.1 IFF wrapper</h4>
+<h4><a href="#8.2.1">8.2.1</a> IFF wrapper</h4>
 <p>An IFF file consists of a number of chunks. Each chunk is laid out in three fields:</p>
 <table class="hoist">
 <tr>
-  <td><code>BYTE[4]</code></td>
+  <td><span class="ty" title="array of four bytes">BYTE[4]</span></td>
   <td>Chunk ID. Describes the use of the chunk. The strings that identify the types of chunks used in DjVu are listed below.</td>
 </tr>
 <tr>
-  <td><code>BE32</code></td>
+  <td><span class="ty" title="32-bit unsigned integer, most significant byte first">BE32</span></td>
   <td>The length of the data.</td>
 </tr>
 <tr>
-  <td><code>BYTE[]</code></td>
+  <td><span class="ty" title="variable-length array of bytes">BYTE[]</span></td>
   <td>The contained data.</td>
 </tr>
 </table>
@@ -295,7 +297,7 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 </section><!-- 8.2.1 -->
 
 <section id="8.2.2">
-<h4>8.2.2 Chunk summary</h4>
+<h4><a href="#8.2.2">8.2.2</a> Chunk summary</h4>
 <p>The chunks used in the DjVu file format are summarized in Table 1.</p>
 <table class="hoist">
 <caption>Table 1: chunk summary</caption>
@@ -308,7 +310,7 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 <tbody>
 <tr>
   <td><span class="ck">FORM</span></td>
-  <td>The composite chunk. The first four bytes of the <span class="ck">FORM</span> chunk are a secondary identifier. Such chunks are referred to as <span class="ck">FORM:XXXX</span> where "<span class="ck">XXXX</span>" stands for the secondary identifier.</td>
+  <td>The composite chunk. The first four bytes of the <span class="ck">FORM</span> chunk are a secondary identifier. Such chunks are referred to as <span class="ck">FORM:XXXX</span> where <span class="ck">XXXX</span> stands for the secondary identifier.</td>
 </tr>
 <tr>
   <td><span class="ck">FORM:DJVM</span></td>
@@ -399,11 +401,11 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 <h3><a href="#8.3">8.3</a> IFF chunk types</h3>
 
 <section id="8.3.1">
-<h4>8.3.1 Container chunk: <span class="ck">FORM</span></h4>
+<h4><a href="#8.3.1">8.3.1</a> Container chunk: <span class="ck">FORM</span></h4>
 <p>The <span class="ck">FORM</span> chunk is used as a chunk container. The first four bytes of the <span class="ck">FORM</span> chunk are a secondary ID used to identify the contained chunks.</p>
 
 <section id="8.3.1.1">
-<h5>8.3.1.1 <span class="ck">FORM:DJVM</span></h5>
+<h5><a href="#8.3.1.1">8.3.1.1</a> <span class="ck">FORM:DJVM</span></h5>
 <p>As discussed in §<a href="#7.2">7.2</a>, a multi-page DjVu document is composed of a single (composite) <span class="ck">FORM:DJVM</span> chunk. The first nested chunk is always a <span class="ck">DIRM</span> chunk containing the document directory (see <a class="filename" href="https://sourceforge.net/p/djvu/djvulibre-git/ci/master/tree/libdjvu/DjVmDir.cpp">DjVmDir.h</a>), which represents the list of the component files that make up the document. An optional <span class="ck">NAVM</span> chunk, which describes the outline of the document, may follow the <span class="ck">DIRM</span> chunk.</p>
 <p>Example:</p>
 <pre style="overflow:auto">
@@ -416,7 +418,7 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 </section><!-- 8.3.1.1 -->
 
 <section id="8.3.1.2">
-<h5>8.3.1.2 <span class="ck">FORM:DJVU</span></h5>
+<h5><a href="#8.3.1.2">8.3.1.2</a> <span class="ck">FORM:DJVU</span></h5>
 <p>As discussed in §<a href="#7.1">7.1</a>, a single page in a DjVu document is contained in a single (composite) <span class="ck">FORM:DJVU</span> chunk. The nested first chunk must be the <span class="ck">INFO</span> chunk. The chunks after the <span class="ck">INFO</span> chunk may occur in any order, although the order of the <span class="ck">BG44</span> chunks, if there is more than one, is significant.</p>
 <p>Example:</p>
 <pre style="overflow:auto">
@@ -432,7 +434,7 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 </section><!-- 8.3.1.2 -->
 
 <section id="8.3.1.3">
-<h5>8.3.1.3 <span class="ck">FORM:DJVI</span></h5>
+<h5><a href="#8.3.1.3">8.3.1.3</a> <span class="ck">FORM:DJVI</span></h5>
 <p>Multi-page DjVu documents can share information between pages by nesting a chunk inside a <span class="ck">FORM:DJVI</span> chunk (which is itself held inside the <span class="ck">FORM:DJVM</span> chunk) and referencing the contained chunk from within a page. Individual pages reference the shared chunks via the <span class="ck">INCL</span> chunk.</p>
 <p>Example:</p>
 <pre style="overflow:auto">
@@ -448,7 +450,7 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 </section><!-- 8.3.1.3 -->
 
 <section id="8.3.1.4">
-<h5>8.3.1.4 <span class="ck">FORM:THUM</span></h5>
+<h5><a href="#8.3.1.4">8.3.1.4</a> <span class="ck">FORM:THUM</span></h5>
 <p>Pre-rendered thumbnails may be included. This allows very large documents to render thumbnails of pages without downloading and decoding them. <span class="ck">FORM:THUM</span> chunks contain several <span class="ck">TH44</span> chunks. Each of these chunks contains the thumbnails of the pages that follow.</p>
 <p>Example:</p>
 <pre style="overflow:auto">
@@ -470,25 +472,25 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 </section><!-- 8.3.1 -->
 
 <section id="8.3.2">
-<h4>8.3.2 Directory chunk: <span class="ck">DIRM</span></h4>
+<h4><a href="#8.3.2">8.3.2</a> Directory chunk: <span class="ck">DIRM</span></h4>
 <p>As described in §<a href="#7.2">7.2</a>, a multi-page document will contain “component files” such as individual pages (<span class="ck">FORM:DJVU</span>) or shared annotations (<span class="ck">FORM:DJVI</span>).</p>
 <p>The first contained chunk in a <span class="ck">FORM:DJVM</span> composite chunk is the <span class="ck">DIRM</span> chunk containing the <i>document directory</i>. It contains information the decoder will need to access the component files (see §<a href="#7.2">7.2</a>).</p>
 
 <section id="8.3.2.1">
-<h5>8.3.2.1 Unencoded data</h5>
+<h5><a href="#8.3.2.1">8.3.2.1</a> Unencoded data</h5>
 <p>The first part of the <span class="ck">DIRM</span> chunk is unencoded:</p>
 <table class="hoist">
 <tr>
-  <td><code>BYTE</code></td>
+  <td><span class="ty" title="single byte">BYTE</span></td>
   <td><p>Bit 7 (the MSB) is the <i>bundled</i> flag: 1 for bundled, 0 for indirect.</p>
   <p>Bits 6 through 0 are the version, currently 1.</p></td>
 </tr>
 <tr>
-  <td><code>BE16</code></td>
+  <td><span class="ty" title="16-bit unsigned integer, most significant byte first">BE16</span></td>
   <td>Number of component files.</td>
 </tr>
 <tr>
-  <td><code>BE32[]</code></td>
+  <td><span class="ty" title="variable-length array of 32-bit unsigned integers, most significant byte first">BE32[]</span></td>
   <td><p>When the document is a bundled document (i.e.&nbsp;the flag <var>bundled</var> is set), the header above is followed by the offsets of each of the component files within the <span class="ck">FORM:DJVM</span>. These offsets allow for random component file access.</p>
   <p>When the document is indirect, these offsets are omitted.</p></td>
 </tr>
@@ -496,20 +498,29 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 </section><!-- 8.3.2.1 -->
 
 <section id="8.3.2.2">
-<h5>8.3.2.2 BZZ-encoded data</h5>
+<h5><a href="#8.3.2.2">8.3.2.2</a> BZZ-encoded data</h5>
 <p>The rest of the chunk is entirely compressed with the BZZ general-purpose compressor. We describe now the data fed into (or retrieved from) the BZZ codec (see <a class="filename" href="https://sourceforge.net/p/djvu/djvulibre-git/ci/master/tree/libdjvu/BSByteStream.cpp">BSByteStream.cpp</a> and <a href="#13">Appendix 4</a>).</p>
 <table class="hoist">
 <tr>
-  <td><code>BE24[]</code></td>
+  <td><span class="ty" title="variable-length array of 24-bit unsigned integers, most significant byte first">BE24[]</span></td>
   <td>Size of each component file. May be 0 for indirect documents.</td>
 </tr>
 <tr>
-  <td><code>BYTE[]</code></td>
-  <td>Flag byte for each component file.<!-- TODO --></td>
+  <td><span class="ty" title="variable-length array of bytes">BYTE[]</span></td>
+  <td>
+    <p>Flag byte for each component file.</p>
+    <ul>
+      <li><span class="hex">0b</span>&langle;<var>hasname</var>&rangle;&langle;<var>hastitle</var>&rangle;<span class="hex">000000</span> for a file included by other files</li>
+      <li><span class="hex">0b</span>&langle;<var>hasname</var>&rangle;&langle;<var>hastitle</var>&rangle;<span class="hex">000001</span> for a file representing a page</li>
+      <li><span class="hex">0b</span>&langle;<var>hasname</var>&rangle;&langle;<var>hastitle</var>&rangle;<span class="hex">000010</span> for a file containing thumbnails</li>
+    </ul>
+    <p>Flag <var>hasname</var> is set when the name of the file is different from the file ID. Flag <var>hastitle</var> is set when the title of the file is different from the file ID. These flags are used to avoid encoding the same string three times.</p>
+    <p>Note: in practice, the <var>hasname</var> and <var>hastitle</var> bits are poorly tested and not used.</p>
+  </td>
 </tr>
 <tr>
-  <td><code>ZSTR[]</code></td>
-  <td>There are one to three zero-terminated strings per component file. The first string contains the ID of the component file. If <var>hasname</var> is set then there is a second string which contains the name of the component file (in the case of an indirect file, this is the disk filename). If <var>hastitle</var> is set, then there is a third string which contains the name of the component (for display — for example, alternate page numberings in the Foreword or Preface).</td>
+  <td><span class="ty" title="variable-length array of null-terminated UTF-8 strings">ZSTR[]</span></td>
+  <td>There are one to three zero-terminated strings per component file. The first string contains the ID of the component file. If <var>hasname</var> is set, then there is a second string which contains the name of the component file (in the case of an indirect file, this is the disk filename). If <var>hastitle</var> is set, then there is a third string which contains the name of the component (for display — for example, alternate page numberings in the Foreword or Preface).</td>
 </tr>
 </table>
 <p>Examples:</p>
@@ -556,37 +567,37 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 </section><!-- 8.3.2 -->
 
 <section id="8.3.3">
-<h4>8.3.3 Document outline chunk: <span class="ck">NAVM</span></h4>
+<h4><a href="#8.3.3">8.3.3</a> Document outline chunk: <span class="ck">NAVM</span></h4>
 <p>The <span class="ck">NAVM</span> chunk contains bookmarks which describe an outline of the document. The intent is to allow content authors to create an electronic table of contents which gives users rapid access to various parts of the document.</p>
 <p>This chunk is optional, but, if present, must immediately follow the <span class="ck">DIRM</span> chunk.</p>
 <p>The entire chunk is BZZ-encoded and starts with a single field specifying the total number of bookmark records:</p>
 <table class="hoist">
 <tr>
-  <td><code>BE16</code></td>
+  <td><span class="ty" title="16-bit unsigned integer, most significant byte first">BE16</span></td>
   <td>The total number of bookmarks in the document.</td>
 </tr>
 </table>
 <p>And then the individual bookmark records, nested as necessary:</p>
 <table class="hoist">
 <tr>
-  <td><code>BYTE</code></td>
+  <td><span class="ty" title="single byte">BYTE</span></td>
   <td>The number of immediate child bookmark records.</td>
 </tr>
 <tr>
-  <td><code>BE24</code></td>
+  <td><span class="ty" title="24-bit unsigned integer, most significant byte first">BE24</span></td>
   <td>Size of the description text.</td>
 </tr>
 <tr>
-  <td><code>STR</code></td>
+  <td><span class="ty" title="UTF-8 string">STR</span></td>
   <td>The description text.</td>
 </tr>
 <tr>
-  <td><code>BE24</code></td>
+  <td><span class="ty" title="24-bit unsigned integer, most significant byte first">BE24</span></td>
   <td>Size of the URL text.</td>
 </tr>
 <tr>
-  <td><code>STR</code></td>
-  <td>The URL text. This may (and typically does) use the syntax desribed for the URLs in the <span class="ck">ANTa</span> chunk (and similarly, is not URL-encoded).</td>
+  <td><span class="ty" title="UTF-8 string">STR</span></td>
+  <td>The URL text. This may (and typically does) use the syntax described for the URLs in the <span class="ck">ANTa</span> chunk (and similarly, is not URL-encoded).</td>
 </tr>
 </table>
 <p>Example (as passed to the BZZ codec):</p>
@@ -598,45 +609,45 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 </section><!-- 8.3.3 -->
 
 <section id="8.3.4">
-<h4>8.3.4 Annotation chunk: <span class="ck">ANTa</span>, <span class="ck">ANTz</span></h4>
+<h4><a href="#8.3.4">8.3.4</a> Annotation chunk: <span class="ck">ANTa</span>, <span class="ck">ANTz</span></h4>
 <p>Annotations are contained in <span class="ck">ANTa</span> or <span class="ck">ANTz</span> chunks. The <span class="ck">ANTa</span> chunks contain the annotation in plain text. The <span class="ck">ANTz</span> chunks contain the same information compressed with the BZZ encoder (see <a class="filename" href="https://sourceforge.net/p/djvu/djvulibre-git/ci/master/tree/libdjvu/BSByteStream.h">BSByteStream.h</a>).</p>
 <p>The use of the <span class="ck">ANTa</span> chunk is discouraged.</p>
 <p>Pages can share annotations using an <span class="ck">INCL</span> chunk as explained in §<a href="#7.2.2">7.2.2</a>. The complete annotation text is obtained by concatenating all annotation chunks present in the page. A restriction of the current reference library implementation limits the number of shared annotation files to one.<sup>[<a id="note-8.3.4-1" href="./spec-comments.html#8.3.4-1">1</a>]</sup></p>
 <p>The syntax of the annotation text uses a simple parenthesized notation. All text is standard UTF-8.</p>
 
 <section id="8.3.4.1">
-<h5>8.3.4.1 Initial document view</h5>
+<h5><a href="#8.3.4.1">8.3.4.1</a> Initial document view</h5>
 
 <section id="8.3.4.1.1">
-<h6>8.3.4.1.1 Background color</h6>
+<h6><a href="#8.3.4.1.1">8.3.4.1.1</a> Background color</h6>
 </section><!-- 8.3.4.1.1 -->
 
 <section id="8.3.4.1.2">
-<h6>8.3.4.1.2 Initial zoom</h6>
+<h6><a href="#8.3.4.1.2">8.3.4.1.2</a> Initial zoom</h6>
 </section><!-- 8.3.4.1.2 -->
 
 <section id="8.3.4.1.3">
-<h6>8.3.4.1.3 Initial display level</h6>
+<h6><a href="#8.3.4.1.3">8.3.4.1.3</a> Initial display level</h6>
 </section><!-- 8.3.4.1.3 -->
 
 <section id="8.3.4.1.4">
-<h6>8.3.4.1.4 Alignment</h6>
+<h6><a href="#8.3.4.1.4">8.3.4.1.4</a> Alignment</h6>
 </section><!-- 8.3.4.1.4 -->
 </section><!-- 8.3.4.1 -->
 
 <section id="8.3.4.2">
-<h5>8.3.4.2 Maparea (overprinted annotations)</h5>
+<h5><a href="#8.3.4.2">8.3.4.2</a> Maparea (overprinted annotations)</h5>
 
 <section id="8.3.4.2.1">
-<h6>8.3.4.2.1 <var>url</var></h6>
+<h6><a href="#8.3.4.2.1">8.3.4.2.1</a> <var>url</var></h6>
 </section><!-- 8.3.4.2.1 -->
 
 <section id="8.3.4.2.2">
-<h6>8.3.4.2.2 <var>comment</var></h6>
+<h6><a href="#8.3.4.2.2">8.3.4.2.2</a> <var>comment</var></h6>
 </section><!-- 8.3.4.2.2 -->
 
 <section id="8.3.4.2.3">
-<h6>8.3.4.2.3 <var>area</var></h6>
+<h6><a href="#8.3.4.2.3">8.3.4.2.3</a> <var>area</var></h6>
 </section><!-- 8.3.4.2.3 -->
 </section><!-- 8.3.4.2 -->
 
@@ -658,7 +669,7 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 <section id="11.1">
 <h3><a href="#11.1">11.1</a> General considerations</h3>
 <p>Selection layer coding is used in compound DjVu images. In such images, there are three layers. The foreground layer is coded in one <span class="ck">FG44</span> chunk, and is rendered as described in <a href="#10">Appendix 1</a>. The background layer is coded in one or more <span class="ck">BG44</span> chunks, and is rendered as described in Appendix 1. The selection layer is coded using one <span class="ck">Sjbz</span> chunk. Black pixels in the selection layer specify those pixels that are to be rendered using the foreground color. All other pixels are to be rendered using the background color.</p>
-<p>Black-and-white coding is used in bi-level DjVu images. In such images, there are three layres. The foreground layer is black. The background layer is white. The selection layer is coded using one <span class="ck">Sjbz</span> chunk. The selection layer specifies those pixels that are to be rendered in black. All other pixels are to be rendered in white.</p>
+<p>Black-and-white coding is used in bi-level DjVu images. In such images, there are three layers. The foreground layer is black. The background layer is white. The selection layer is coded using one <span class="ck">Sjbz</span> chunk. The selection layer specifies those pixels that are to be rendered in black. All other pixels are to be rendered in white.</p>
 <p>An <span class="ck">Sjbz</span> chunk contains a single arithmetically-coded data stream, coded using the Z&prime;-Coder (<a href="#12">Appendix 3</a>). All data, including headers and record types, is coded in this arithmetically-coded stream.</p>
 </section><!-- 11.1 -->
 
@@ -693,19 +704,19 @@ different combinations of values that the pixels in the refinement coding templa
 <p>Integers are coded using the multivalue extension to the Z&prime;-Coder, described below. There are 15 contexts for coding multivalued integers, as described in Table 7.</p>
 
 <section id="11.2.1">
-<h4>11.2.1 Initialization of the Z&prime;-Coder</h4>
+<h4><a href="#11.2.1">11.2.1</a> Initialization of the Z&prime;-Coder</h4>
 <p>All Z&prime;-Coder contexts are initialized to the value 0. This applies both to contexts used to encode single-bit values, including pixel colors, and to contexts that are part of an integer context used by the multivalue extension to the Z&prime;-Coder.</p>
 </section><!-- 11.2.1 -->
 
 <section id="11.2.2">
-<h4>11.2.2 The multivalue extension to the Z&prime;-Coder for coding of numeric data</h4>
+<h4><a href="#11.2.2">11.2.2</a> The multivalue extension to the Z&prime;-Coder for coding of numeric data</h4>
 <p>Quantities that can take on multiple values are coded as integers using the multivalue extension to the Z&prime;-Coder. This extension of the Z&prime;-Coder allows all data in the bit stream to be coded using the same coder, the Z&prime;-Coder. There are 15 integer contexts, specified in Table 7. A single integer context includes a number of binary contexts.</p>
 <p>One integer context consists of a binary decision tree. See Figure 1 for an example of part of such a tree. The root node of the tree corresponds to the decision about the sign of the number <var>n</var> being decoded. Each of the two sub-trees under the root corresponds to a set of decisions that eventually identify a range in which <var>n</var> lies. The sub-trees under the nodes corresponding to identified ranges are complete binary trees that identify the exact value of <var>n</var>.</p>
 <p>Each node of the binary decision tree for an integer context maintains its own binary probability estimation context for the Z&prime;-Coder. The trees for different integer contexts are completely independent. Thus each node of a tree contains probability information conditioned on a conditioning context. The conditioning context consists of both the type of value being coded (i.e., the selection of the integer context), and of the values of the decisions coded so far when encoding the current integer.</p>
 </section><!-- 11.2.2 -->
 
 <section id="11.2.3">
-<h4>11.2.3 Record types</h4>
+<h4><a href="#11.2.3">11.2.3</a> Record types</h4>
 <table>
 <caption>Table 6: record types and fields coded for each record type</caption>
 <thead>
@@ -858,7 +869,7 @@ different combinations of values that the pixels in the refinement coding templa
 </section><!-- 11.2.3 -->
 
 <section id="11.2.4">
-<h4>11.2.4 Fields and contexts</h4>
+<h4><a href="#11.2.4">11.2.4</a> Fields and contexts</h4>
 <table>
 <caption>Table 7: multivalued integer contexts for arithmetic coding</caption>
 <thead>
@@ -937,7 +948,7 @@ different combinations of values that the pixels in the refinement coding templa
 </section><!-- 11.2.4 -->
 
 <section id="11.2.5">
-<h4>11.2.5 Coding phases</h4>
+<h4><a href="#11.2.5">11.2.5</a> Coding phases</h4>
 <figure>
 <!-- TODO -->
 <figcaption>
@@ -999,7 +1010,7 @@ At the end of the process of decoding an integer, <var>v</var> is converted to <
 <p>The value of an integer is coded by making a sequence of binary decisions, each one narrowing the set of values that the integer can possibly take. The decisions are based on traversing a binary decision tree to one of its leaves. Note: although the tree conceptually has a large number of nodes, it is possible in an implementation to allocate memory only for those nodes actually traversed. Decoding proceeds in four phases.</p>
 
 <section id="11.2.5.1">
-<h5>11.2.5.1 Phase 1</h5>
+<h5><a href="#11.2.5.1">11.2.5.1</a> Phase 1</h5>
 <p>Phase 1 determines the sign of <var>n</var>. A value of 0 returned by the Z&prime;-Coder means that
 <math>
   <mrow>
@@ -1019,33 +1030,33 @@ A value of 1 returned by the Z&prime;-Coder means that
 </section><!-- 11.2.5.1 -->
 
 <section id="11.2.5.2">
-<h5>11.2.5.2 Phase 2</h5>
+<h5><a href="#11.2.5.2">11.2.5.2</a> Phase 2</h5>
 <p>Phase 2 determines a range of possible values for <var>v</var>. The Z&prime;-Coder is invoked repeatedly to answer the question “Is the value of <var>v</var> in the range being tested?” The sequence of ranges tested is given in Table 8. A value of 0 returned by the Z&prime;-Coder means that <var>v</var> is not in the specified range, and the next range in the sequence must be tested. A value of 1 returned by the Z&prime;-Coder means that <var>v</var> is in the specified range, and decoding is to proceed to Phase 3.</p>
 <table>
 <caption>Table 8: sequence of ranges in which <var>v</var> may fall</caption>
-<tr><td>0</td></tr>
-<tr><td>1–2</td></tr>
-<tr><td>3–6</td></tr>
-<tr><td>7–14</td></tr>
-<tr><td>15–30</td></tr>
-<tr><td>31–62</td></tr>
-<tr><td>63–126</td></tr>
-<tr><td>127–254</td></tr>
-<tr><td>255–510</td></tr>
-<tr><td>511–1022</td></tr>
-<tr><td>1023–2046</td></tr>
-<tr><td>2047–4094</td></tr>
-<tr><td>4095–8190</td></tr>
-<tr><td>8191–16382</td></tr>
-<tr><td>16383–32766</td></tr>
-<tr><td>32767–65534</td></tr>
-<tr><td>65535–131070</td></tr>
+<tr><td>&#8199;&#8199;&#8199;&#8199;&#8199;0</td></tr>
+<tr><td>&#8199;&#8199;&#8199;&#8199;&#8199;1–2</td></tr>
+<tr><td>&#8199;&#8199;&#8199;&#8199;&#8199;3–6</td></tr>
+<tr><td>&#8199;&#8199;&#8199;&#8199;&#8199;7–14</td></tr>
+<tr><td>&#8199;&#8199;&#8199;&#8199;15–30</td></tr>
+<tr><td>&#8199;&#8199;&#8199;&#8199;31–62</td></tr>
+<tr><td>&#8199;&#8199;&#8199;&#8199;63–126</td></tr>
+<tr><td>&#8199;&#8199;&#8199;127–254</td></tr>
+<tr><td>&#8199;&#8199;&#8199;255–510</td></tr>
+<tr><td>&#8199;&#8199;&#8199;511–1022</td></tr>
+<tr><td>&#8199;&#8199;1023–2046</td></tr>
+<tr><td>&#8199;&#8199;2047–4094</td></tr>
+<tr><td>&#8199;&#8199;4095–8190</td></tr>
+<tr><td>&#8199;&#8199;8191–16382</td></tr>
+<tr><td>&#8199;16383–32766</td></tr>
+<tr><td>&#8199;32767–65534</td></tr>
+<tr><td>&#8199;65535–131070</td></tr>
 <tr><td>131071–262142</td></tr>
 </table>
 </section><!-- 11.2.5.2 -->
 
 <section id="11.2.5.3">
-<h5>11.2.5.3 Phase 3</h5>
+<h5><a href="#11.2.5.3">11.2.5.3</a> Phase 3</h5>
 <p>Phase 3 consists of determining the exact value of <var>v</var> within the range determined in Phase 2. If Phase 2 determined that
 <math>
   <mrow>
@@ -1058,7 +1069,7 @@ then Phase 3 is skipped. Otherwise, since the size of the range is a power of 2,
 </section><!-- 11.2.5.3 -->
 
 <section id="11.2.5.4">
-<h5>11.2.5.4 Phase 4</h5>
+<h5><a href="#11.2.5.4">11.2.5.4</a> Phase 4</h5>
 <p>In Phase 4, the unsigned value <var>v</var> is converted to <var>n</var>, the signed value to be returned, as follows:
 <math display="block">
   <mrow>
@@ -1128,77 +1139,172 @@ then Phase 3 is skipped. Otherwise, since the size of the range is a power of 2,
 <p>Records in <span class="ck">Sjbz</span> chunks have the following interpretations.</p>
 
 <section id="11.4.1">
-<h4>11.4.1 Start of image</h4>
+<h4><a href="#11.4.1">11.4.1</a> Start of image</h4>
 <p>This record is the first record in an <span class="ck">Sjbz</span> chunk. It specifies the dimensions of the image.</p>
 </section><!-- 11.4.1 -->
 
 <section id="11.4.2">
-<h4>11.4.2 New symbol, add to image and library</h4>
+<h4><a href="#11.4.2">11.4.2</a> New symbol, add to image and library</h4>
 <p>This record specifies the bitmap of a symbol that is coded directly and placed into the reconstructed image and into the symbol bitmap library.</p>
 </section><!-- 11.4.2 -->
 
 <section id="11.4.3">
-<h4>11.4.3 New symbol, add to library only</h4>
+<h4><a href="#11.4.3">11.4.3</a> New symbol, add to library only</h4>
 <p>This record specifies the bitmap of a symbol that is coded directly and placed into the symbol bitmap library but not into the image.</p>
 </section><!-- 11.4.3 -->
 
 <section id="11.4.4">
-<h4>11.4.4 New symbol, add to image only</h4>
+<h4><a href="#11.4.4">11.4.4</a> New symbol, add to image only</h4>
 <p>This record specifies the bitmap of a symbol that is coded directly and placed into the reconstructed image but not into the symbol bitmap library.</p>
 </section><!-- 11.4.4 -->
 
 <section id="11.4.5">
-<h4>11.4.5 Matched symbol with refinement, add to image and library</h4>
+<h4><a href="#11.4.5">11.4.5</a> Matched symbol with refinement, add to image and library</h4>
 <p>This record specifies the bitmap of a symbol that is coded by refinement of a symbol in the symbol bitmap library and placed into the reconstructed image and into the symbol bitmap library.</p>
 </section><!-- 11.4.5 -->
 
 <section id="11.4.6">
-<h4>11.4.6 Matched symbol with refinement, add to library only</h4>
+<h4><a href="#11.4.6">11.4.6</a> Matched symbol with refinement, add to library only</h4>
 <p>This record specifies the bitmap of a symbol that is coded by refinement of a symbol in the symbol bitmap library and placed into the symbol bitmap library, but not into the reconstructed image.</p>
 </section><!-- 11.4.6 -->
 
 <section id="11.4.7">
-<h4>11.4.7 Matched symbol with refinement, add to image only</h4>
+<h4><a href="#11.4.7">11.4.7</a> Matched symbol with refinement, add to image only</h4>
 <p>This record specifies the bitmap of a symbol that is coded by refinement of a symbol in the symbol bitmap library and placed into the reconstructed image, but not into the symbol bitmap library.</p>
 </section><!-- 11.4.7 -->
 
 <section id="11.4.8">
-<h4>11.4.8 Matched symbol, copy to image without refinement</h4>
+<h4><a href="#11.4.8">11.4.8</a> Matched symbol, copy to image without refinement</h4>
 <p>This record specifies the location at which the bitmap of a symbol in the symbol bitmap library is to be placed into the reconstructed image.</p>
 </section><!-- 11.4.8 -->
 
 <section id="11.4.9">
-<h4>11.4.9 Non-symbol data</h4>
+<h4><a href="#11.4.9">11.4.9</a> Non-symbol data</h4>
 <p>This record specifies a direct-coded bitmap to be placed at an absolute location in the reconstructed image. A bitmap of non-symbol data is not placed into the symbol bitmap library.</p>
 </section><!-- 11.4.9 -->
 
 <section id="11.4.10">
-<h4>11.4.10 Shared dictionary or reset</h4>
+<h4><a href="#11.4.10">11.4.10</a> Shared dictionary or reset</h4>
 <p>This record is overloaded and its meaning depends on its context. If the record occurs before a "Start of data" record, then it is a "Required dictionary" record. If the record occurs after a "Start of data" record then it is a "Reset" record.</p>
 
 <section id="11.4.10.1">
-<h5>11.4.10.1 Shared shape dictionaries</h5>
+<h5><a href="#11.4.10.1">11.4.10.1</a> Shared shape dictionaries</h5>
+<p>Starting with version 21, the JB2 format provides support for sharing symbol definitions between the pages of a document. To achieve this objective, the JB2 image data chunk must be able to address symbols defined elsewhere by a JB2 dictionary data chunk shared by all the pages of a document.</p>
+<p>A "Shared dictionary or reset" record can appear <em>before</em> the "Start of data" record. The record type field is followed by a single number arithmetically encoded using the sixteenth dictionary size context. This record appears when the JB2 data chunk requires symbols encoded in a separate JB2 dictionary data chunk. The number (the <i>dictionary size</i>) indicates how many symbols should have been defined by the JB2 dictionary data chunk. The decoder should simply load these symbols into the symbol library and proceed as usual. New symbols potentially defined by the subsequent JB2 image data records will therefore be numbered with integers greater than or equal to the dictionary size.</p>
 </section><!-- 11.4.10.1 -->
 
 <section id="11.4.10.2">
-<h5>11.4.10.2 Numcoder reset</h5>
+<h5><a href="#11.4.10.2">11.4.10.2</a> Numcoder reset</h5>
+<p>The encoding of numbers potentially uses an unbounded number of binary coding contexts. These contexts are normally allocated when they are used for the first time (see <!-- TODO -->).</p>
+<p>Starting with version 21, a "Shared dictionary or reset" record can appear <em>after</em> the "Start of data" record. The decoder should proceed with the next record after <em>clearing all binary contexts used for coding numbers</em>. This operation implies that all binary contexts previously allocated for coding numbers can be deallocated.</p>
+<p>Starting with version 21, the JB2 encoder should insert a "Shared dictionary or reset" record whenever the number of these allocated binary contexts exceeds 20000. Only very large documents ever reach such a large number of allocated binary contexts (e.g.&nbsp;large maps). Hardware implementation however can benefit greatly from a hard bound on the total number of binary coding contexts. Old JB2 decoders will treat this record type as an "End of data" record and cleanly stop decoding (see <!-- TODO -->).</p>
 </section><!-- 11.4.10.2 -->
 
 <section id="11.4.10.3">
-<h5>11.4.10.3 Record types in a shared dictionary</h5>
+<h5><a href="#11.4.10.3">11.4.10.3</a> Record types in a shared dictionary</h5>
+<p>The shared JB2 dictionary data format is a pure subset of the JB2 image data format:</p>
+<ul>
+<li>Required dictionary</li>
+<li>Start of data</li>
+<li>New symbol, add to library only</li>
+<li>Matched symbol with refinement, add to library only</li>
+<li>Numcoder reset</li>
+<li>Comment</li>
+<li>End of data</li>
+</ul>
+<p>Note that each shared dictionary can itself include another shared dictionary.</p>
+<p>The JB2 dictionary data is usually located in an <span class="ck">Djbz</span> chunk. Each page may directly contain a <span class="ck">Djbz</span> chunk, or may indirectly point to such a chunk using an <span class="ck">INCL</span> chunk (see <!-- TODO -->).</p>
 </section><!-- 11.4.10.3 -->
 </section><!-- 11.4.10 -->
 
 <section id="11.4.11">
-<h4>11.4.11 Comment</h4>
+<h4><a href="#11.4.11">11.4.11</a> Comment</h4>
+<p>This record contains data whose interpretation is not specified by the standard.</p>
 </section><!-- 11.4.11 -->
 
 <section id="11.4.12">
-<h4>11.4.12 End of data</h4>
+<h4><a href="#11.4.12">11.4.12</a> End of data</h4>
+<p>This record is the last record of an <span class="ck">Sjbz</span> chunk.</p>
 </section><!-- 11.4.12 -->
-
 </section><!-- 11.4 -->
 
+<section id="11.5">
+<h3>11.5 Fields</h3>
+<p>The following fields are coded in records of the types specified in Table 6 and in §<a href="#11.4">11.4</a>.</p>
+
+<section id="11.5.1">
+<h4><a href="#11.5.1">11.5.1</a> Record type</h4>
+<p>The record type is coded by the multivalue extension to the Z&prime;-Coder using the record type context. The range of allowable record types is from 0 to 11. The coded values are specified in the first column of Table 6.</p>
+</section><!-- 11.5.1 -->
+
+<section id="11.5.2">
+<h4><a href="#11.5.2">11.5.2</a> Image size</h4>
+<p>The width and height of the image are coded by the multivalue extension to the Z&prime;-Coder using the image size context. The width is coded first, then the height. The range of allowable values is from 0 to 262142. The width and height of a compound DjVu image or bi-level DjVu image must be the same as the width and height of the image specified in the <span class="ck">INFO</span> chunk.</p>
+</section><!-- 11.5.2 -->
+
+<section id="11.5.3">
+<h4><a href="#11.5.3">11.5.3</a> Eventual image refinement flag</h4>
+<p>The eventual image refinement flag is coded once, in the "Start of image" record, to notify the decoder whether image refinement data will eventually be provided. It is a binary value, coded by the Z&prime;-Coder using the eventual image refinement context. The coded value 1 means <code>TRUE</code> and the coded value 0 means <code>FALSE</code>. Note: this flag is always <code>FALSE</code> in the current version of the standard, but it may be <code>TRUE</code> in later versions.</p>
+</section><!-- 11.5.3 -->
+
+<section id="11.5.4">
+<h4><a href="#11.5.4">11.5.4</a> Index of matching symbol in bitmap library</h4>
+<p>The index of a matching symbol in the bitmap library is coded with the multivalue extension to the Z&prime;-Coder, using the matching symbol index context. The range of allowable values is from 0 to one less than the number of symbols currently in the bitmap library.</p>
+</section><!-- 11.5.4 -->
+
+<section id="11.5.5">
+<h4><a href="#11.5.5">11.5.5</a> Absolute symbol size</h4>
+<p>The width of a symbol is coded by the multivalue extension to the Z&prime;-Coder using the symbol width context. Then the height of the symbol is coded by the multivalue extension to the Z&prime;-Coder using the symbol height context. The range of allowable values for both of these data elements is from 0 to 262142.</p>
+</section><!-- 11.5.5 -->
+
+<section id="11.5.6">
+<h4><a href="#11.5.6">11.5.6</a> Relative symbol size</h4>
+<p>The signed differences between the width and height of the current symbol and the width and heigh of the matching symbol are coded by the multivalue extension to the Z&prime;-Coder using the symbol width different context and the symbol height difference context for the height. The width difference is coded first, then the height difference. The coded signed difference is added to the width or height of the matching symbol to obtain the width or height of the current symbol. The range of allowable values for both of these data elements is from -262143 to 262142.</p>
+</section><!-- 11.5.6 -->
+
+<section id="11.5.7">
+<h4><a href="#11.5.7">11.5.7</a> Absolute location</h4>
+<p>The horizontal and vertical positions of the upper left corner of the bitmap are coded by the multivalue extension to the Z&prime;-Coder using the symbol column number context for the horizontal position and the symbol row number context for the vertical position. The horizontal position is coded first, then the vertical position. The range of allowable values for the horizontal position is from 1 to the width of the image in pixels. The range of allowable values for the vertical position is from 1 to the height of the image in pixels.</p>
+</section><!-- 11.5.7 -->
+
+<esction id="11.5.8">
+<h4><a href="#11.5.8">11.5.8</a> Location relative to a previous symbol</h4>
+<p>The offset type flag is coded by the Z&prime;-Coder using the offset type context. It indicates the reference symbol for coding the offset of the location of the current symbol. The coded value 1 means <code>FIRST</code>, which means that the location of the current symbol is being specified relative to the first symbol on the current text line. The value 0 means <code>PREVIOUS</code>, which means that the location of the current symbol is being specified relative to the most recently coded symbol on the current text line.</p>
+<p>If the offset type flag is <code>FIRST</code>, then the reference symbol is the first symbol on the current text line. The horizontal offset is the signed difference between the left edge of the current symbol and the left edge of the reference symbol. It is coded with the multivalue extension to the Z&prime;-Coder using the new line column offset context.</p>
+</section><!-- 11.5.8 -->
+
+<section id="11.5.9">
+<h4><a href="#11.5.9">11.5.9</a> Bitmap by direct coding</h4>
+<p>Non-symbol bitmaps and symbol bitmaps with no sufficiently closely matching symbol in the symbol library are coded directly. A directly-coded bitmap is coded by repeated applications of the Z&prime;-Coder to the pixels of the bitmap left to right across the rows, starting with the top row. When one row has been coded, the next lower row is coded. Each pixel is coded by the Z&prime;-Coder using an appropriate context based on the values of 10 previously coded pixels. A coded value of 1 means the pixel is black. A coded value of 0 means the pixel is white.</p>
+<p>The colors of the pixels numbered 1 through 10 in Figure 2, taken collectively, form a 10-bit value. Each of these values is an index into a table of 1024 different directly-coded bitmap contexts. The pixel labeled <i>P</i> in Figure 2 is coded using the context indexed by the collective values of the other 10 numbered pixels in the template. Pixels outside the bounding box are considered to be white.</p>
+<figure>
+<!-- TODO -->
+<figcaption>Figure 2: template for direct coding</figcaption>
+</figure>
+</section><!-- 11.5.9 -->
+
+<section id="11.5.10">
+<h4><a href="#11.5.10">11.5.10</a> Bitmap by refinement coding</h4>
+<p>Some bitmaps are coded by making use of data from another bitmap; this process is called <i>refinement coding</i>. Matched symbols other than those to be copied are coded using refinement coding.</p>
+<p>A bitmap coded by refinement coding is coded by repeated application of the Z&prime;-Coder to the pixels of the bitmap, left to right across the rows. When one row has been coded, the next lower row is coded. Each pixel is coded by the Z&prime;-Coder using an appropriate context based on the values of four previously coded pixels from the bitmap being coded and seven pixels from the matching bitmap. (The pixels numbered 1 through 4 in Figure 3 are from the current symbol; the pixels numbered 5 through 11 are from the matching symbol.) A coded value of 1 means the pixel is black. A coded value of 0 means the pixel is white. The colors of the pixels numbered 1 through 11 in Figure 3, taken collectively, form an 11-bit value. Each of these values is an index into a table of 2048 different refinement-coded bitmap contexts. The pixel labeled <i>P</i> in Figure 3 is coded using the context indexed by the collective values of the 11 numbered pixels in the template. Pixel 7 is in the position in the matching symbol that corresponds to the position of pixel <i>P</i> in the current symbol when the two symbols are aligned.</p>
+<p>Alignment of the current bitmap and the matching bitmap proceeds as follows. For matched symbols, the current symbol and the matching symbol are aligned according to the geometric centers of their bounding rectangles. If the number of columns or rows is even, the geometric center falls between two columns or rows, respectively. In this case, the leftmost of the two central columns or the lowermost of the two central rows is considered to be the central column or row, respectively.</p>
+<figure>
+<!-- TODO -->
+<figcaption>Figure 3: template for refinement coding. (a) Pixels from symbol being coded from matching symbol. (b) Pixels from matching symbol.</figcaption>
+</figure>
+<p>It is possible for the current symbol to have empty edge rows or columns. These empty rows and columns are coded, and are included in the bounding rectangle. For symbols added to the library, the symbol is added to the library after it has been placed into the image. Any empty edge rows and columns are removed before the symbol is added to the library.</p>
+</section><!-- 11.5.10 -->
+
+<section id="11.5.11">
+<h4><a href="#11.5.11">11.5.11</a> Comment length</h4>
+<p>The comment length is the number of octets in the comment. It is coded by the multivalue extension to the Z&prime;-Coder using the comment length context. The range of allowable values for the comment length is from 0 to 262142.</p>
+</section><!-- 11.5.11 -->
+
+<section id="11.5.12">
+<h4><a href="#11.5.12">11.5.12</a> Comment data</h4>
+<p>Comment data consists of the individual octets of the comment. The number of octets in the comment is given by the comment length field. Each of the octets is coded using the multivalue extension to the Z&prime;-Coder using the comment octet context. The range of allowable values for each octet is from 0 to 255.</p>
+</section><!-- 11.5.12 -->
+</section><!-- 11.5 -->
 </section><!-- 11 -->
 
 <section id="12">
@@ -1318,7 +1424,7 @@ is the next probability state index for context <var>k</var> after an LPS.</p>
 </figure>
 
 <section id="12.3.1">
-<h4>12.3.1 Notes on specific lines of Figure 1</h4>
+<h4><a href="#12.3.1">12.3.1</a> Notes on specific lines of Figure 1</h4>
 <dl>
 <dt>Line 2</dt>
 <dd>The division is a right shift, discarding the two least significant bits.</dd>
@@ -1444,7 +1550,7 @@ may be accomplished by left shifts, leaving the least significant bit equal to 0
 </figure>
 
 <section id="12.4.1">
-<h4>12.4.1 Notes on specific lines of Figure 2</h4>
+<h4><a href="#12.4.1">12.4.1</a> Notes on specific lines of Figure 2</h4>
 <dl>
 <dt>Line 1</dt>
 <dd>The division is a right shift, discarding the three least significant bits.</dd>
@@ -1494,15 +1600,15 @@ may be accomplished by left shifts, leaving the least significant bit equal to 0
 <p>We describe the decoding algorithm by means of pseudo-code.</p>
 
 <section id="13.2.1">
-<h4>13.2.1 Decoding pseudo-code</h4>
+<h4><a href="#13.2.1">13.2.1</a> Decoding pseudo-code</h4>
 <!-- TODO -->
 </section><!-- 13.2.1 -->
 
 <section id="13.2.2">
-<h4>13.2.2 Notes</h4>
+<h4><a href="#13.2.2">13.2.2</a> Notes</h4>
 
 <section id="13.2.2.1">
-<h5>13.2.2.1 Overview of decoding a block</h5>
+<h5><a href="#13.2.2.1">13.2.2.1</a> Overview of decoding a block</h5>
 <p>For each block, one must decode</p>
 <ul>
 <li>the block size (with <code>decode_raw</code>)</li>
@@ -1518,7 +1624,7 @@ may be accomplished by left shifts, leaving the least significant bit equal to 0
 </section><!-- 13.2.2.1 -->
 
 <section id="13.2.2.2">
-<h5>13.2.2.2 MTF array reordering</h5>
+<h5><a href="#13.2.2.2">13.2.2.2</a> MTF array reordering</h5>
 <p>The MTF array contains 256 bytes initialized with the identity mapping, that is <code>MTF[0] = 0</code>, <code>MTF[1] = 1</code>, … , <code>MTF[255] = 255</code>.</p>
 <p>Whenever one decodes a number <code>MTFNO</code>, the corresponding symbol to store in the Burrows–Wheeler buffer is <code>MTF[MTFNO]</code> (except for the <code>&langle;EOB&rangle;</code> symbol — see §<a href="#13.2.2.3">13.2.2.3</a>) and the contents of the MTF array are rotated. The rotation moves the symbol that was at position <code>MTF[MTFNO]</code><!-- FIXME --> to a position <code>M</code> that can be 0, 1, 2, or 3. Meanwhile the symbols <code>MTF[M]</code> to <code>MTF[MTFNO - 1]</code> are moved to positions <code>M + 1</code> to <code>MTFNO</code>.</p>
 <p>The position <code>M</code> is chosen using an estimate of the frequency of the symbol <code>MTF[MTFNO]</code>. One strives to position the most frequent symbols at the beginning of the MTF array. To that end, one maintains an array <code>FREQ[0..3]</code> that contains numbers representative of the instantaneous frequencies of the symbols <code>MTF[0..3]</code>.</p>
@@ -1720,7 +1826,7 @@ and simply consider
 </section><!-- 13.2.2.2 -->
 
 <section id="13.2.2.3">
-<h5>13.2.2.3 Decoding the number <code>MTFNO</code></h5>
+<h5><a href="#13.2.2.3">13.2.2.3</a> Decoding the number <code>MTFNO</code></h5>
 <p>Now we can discuss how the numbers <code>MTFNO</code> are stored. There are 262 arithmetic coding contexts. These are initialized to zero at the beginning of the stream decoding process. They should <em>not</em> be reset to zero at the beginning of the block decoding process.</p>
 <p>Because the most frequently used symbols should appear near the front of the array, we expect small values for <code>MTFNO</code> (the index into the MTF array). By design, the number of bits and the number of contexts required to decode increases for larger values of <code>MTFNO</code>:</p>
 <ul>
@@ -1735,7 +1841,7 @@ and simply consider
 </section><!-- 13.2.2.3 -->
 
 <section id="13.2.2.4">
-<h5>13.2.2.4 Inverse Burrows–Wheeler transform</h5>
+<h5><a href="#13.2.2.4">13.2.2.4</a> Inverse Burrows–Wheeler transform</h5>
 <p>After decoding the <code>BLOCKSIZE</code> symbols composing the Burrows–Wheeler buffer, we need to perform the inverse Burrows–Wheeler transform to recover the <code>BLOCKSIZE - 1</code> decoded bytes followed by the <code>&langle;EOB&rangle;</code> symbol.</p>
 <p>To start, we</p>
 <ul>
