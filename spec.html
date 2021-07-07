@@ -11,6 +11,7 @@
 a.bare, .filename { font-family: sans-serif; }
 dt { font-style: italic; }
 table.hoist td:nth-child(1) { vertical-align: top; }
+h1 small, h2 small, h3 small, h4 small, h5 small, h6 small { font-weight: normal; }
 </style>
 </head>
 <body>
@@ -27,7 +28,7 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 </table>
 
 <section id="1">
-<h2><a href="#1">1</a> Introduction</h2>
+<h2><a href="#1">1</a> Introduction <small>[<a href="#">top</a>]</small></h2>
 <p>Although the Internet has given us a worldwide infrastructure on which to build the universal library, much of the world’s knowledge, history, and literature is still trapped on paper in the basements of the world’s traditional libraries. Many libraries and content owners are in the process of digitizing their collections. While many such efforts involve the painstaking process of converting paper documents to computer-friendly form, such as SGML-based formats, the high cost of such conversions limits their extent. Scanning documents and distributing the resulting images electronically is not only considerably cheaper, but also more faithful to the original document because it preserves its visual aspect.</p>
 <p>Despite the quickly-improving speed of network connections and computers, the number of scanned document images accessible on the Web today is relatively small. There are several reasons for this.</p>
 <p>The first reason is the relatively high cost of scanning anything else but unbound sheets in black and white. This problem is slowly going away with the appearance of fast and low-cost color scanners with sheet feeders.</p>
@@ -36,12 +37,12 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 </section><!-- 1 -->
 
 <section id="2">
-<h2><a href="#2">2</a> Document organization</h2>
+<h2><a href="#2">2</a> Document organization <small>[<a href="#">top</a>]</small></h2>
 <p>This document describes the DjVu file format. It is written “from top down”, providing first a high-level understanding of the features and techniques used in DjVu (see §<a href="#3">3</a>), then a mid-level view at the IFF85 level (see §<a href="#7">7</a>), and finally a very detailed description of the underlying algorithms and byte-by-byte makeup of DjVu files (see §<a href="#8">8</a>).</p>
 </section><!-- 2 -->
 
 <section id="3">
-<h2><a href="#3">3</a> Overview</h2>
+<h2><a href="#3">3</a> Overview <small>[<a href="#">top</a>]</small></h2>
 <p>This section describes the DjVu file format at a high level: how DjVu uses the Mixed Raster Content model, how images are composed into documents, and the non-raster data that such documents can also contain.
 
 <section id="3.1">
@@ -88,8 +89,8 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 </section><!-- 3.3 -->
 </section><!-- 3 -->
 
-<section id="4">
-<h2><a href="#4">4</a> What’s new in the DjVu file format</h2>
+<section id="4" >
+<h2><a href="#4">4</a> What’s new in the DjVu file format <small>[<a href="#">top</a>]</small></h2>
 <p>Since the last update to the file format documentation, <a href="#6.1">Reference 1</a>, the file format has been extended to include:</p>
 <dl>
 
@@ -103,7 +104,7 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 <dd>Text and the associated layout information can be stored with each image. This allows documents to be searched and indexed. See §<a href="#8.3.5">8.3.5</a>.</dd>
 
 <dt>Document outline</dt>
-<dd>A hierarchical outline can be specified at the document level. This allows the document to present an integrated outline for overview and navigation. See §<a href="#8.3.2">8.3.2</a>.</dd>
+<dd>A hierarchical outline can be specified at the document level. This allows the document to present an integrated outline for overview and navigation. See §<a href="#8.3.3">8.3.3</a>.</dd>
 
 <dt>Colorized JB2</dt>
 <dd>A palettized extension is provided for the bitonal encoder. See §<a href="#8.3.10">8.3.10</a>.</dd>
@@ -112,12 +113,12 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 </section><!-- 4 -->
 
 <section id="5">
-<h2><a href="#5">5</a> Acknowledgements</h2>
+<h2><a href="#5">5</a> Acknowledgements <small>[<a href="#">top</a>]</small></h2>
 <p>This work is significantly based on <a href="#6.1">Reference 1</a> and the summary of file format changes described in the DjVuLibre project maintained by Leon Bottou and others.</p>
 </section><!-- 5 -->
 
 <section id="6">
-<h2><a href="#6">6</a> References</h2>
+<h2><a href="#6">6</a> References <small>[<a href="#">top</a>]</small></h2>
 
 <section id="6.1">
 <h3><a href="#6.1">6.1</a> DjVu 2</h3>
@@ -157,7 +158,7 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 </section><!-- 6 -->
 
 <section id="7">
-<h2><a href="#7">7</a> Component pieces (IFF chunks) of DjVu documents and images</h2>
+<h2><a href="#7">7</a> Component pieces (IFF chunks) of DjVu documents and images <small>[<a href="#">top</a>]</small></h2>
 
 <p>This section describes the DjVu file format at a middle level. This includes types of chunks which can go into various types of documents but not a detailed layout of the contents of those chunks.</p>
 <p>DjVu documents are IFF85 files (see <a href="#6.2">Reference 2</a> for details). The IFF85 structure provides a hierarchy of containers which hold various types of information in a DjVu file. The containers are called “chunks”. How the chunk is used (what it holds) can be determined by its “chunk type” or “chunk ID”. For example, the list of files contained in a multi-page document is held in the <span class="ck">DIRM</span> (“directory”) chunk; annotations are held in a <span class="ck">ANTz</span> chunk.</p>
@@ -242,7 +243,7 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 </section><!-- 7 -->
 
 <section id="8">
-<h2><a href="#8">8</a> Low-level chunk structure and definition</h2>
+<h2><a href="#8">8</a> Low-level chunk structure and definition <small>[<a href="#">top</a>]</small></h2>
 <p>This section describes the DjVu file format at a low level. This includes the binary layout of the IFF85 wrapper and, of course, the layout of each contained chunk.</p>
 
 <section id="8.1">
@@ -273,6 +274,14 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 <p>A chunk whose type is not recognized by the application is to be ignored. In the IFF format, chunks may be nested: a chunk may contain other chunks as part of its data. In the DjVu format, there is only one chunk at the outermost nesting level, a <span class="ck">FORM</span> chunk. All other chunks appear within the <span class="ck">FORM</span> chunk, sequentially, with no nesting.<sup>[<a id="note-8.2.1-1" href="./spec-comments.html#8.2.1-1">1</a>]</sup></p>
 <p>Example:</p>
 <table>
+<thead>
+<tr>
+  <th>Offset</th>
+  <th>Bytes</th>
+  <th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
 <tr>
   <td><span class="hex">00000000</span></td>
   <td><span class="hex">41 54 26 54</span></td>
@@ -289,10 +298,11 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
   <td><span class="hex">0xa668</span> = 26970; length of this <span class="ck">FORM</span> chunk</td>
 </tr>
 <tr>
-  <td><span class="hex">0000000b</span></td>
+  <td><span class="hex">0000000B</span></td>
   <td><span class="hex">44 4a 56 55</span></td>
   <td>"DJVU"; first four bytes of contained data. Since this is a <span class="ck">FORM</span> chunk, this starts with the sub-identifier. This is a <span class="ck">FORM:DJVU</span> chunk, a single-page document.</td>
 </tr>
+</tbody>
 </table>
 </section><!-- 8.2.1 -->
 
@@ -303,8 +313,8 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 <caption>Table 1: chunk summary</caption>
 <thead>
 <tr>
-  <td>Chunk ID</td>
-  <td>Usage</td>
+  <th>Chunk ID</th>
+  <th>Usage</th>
 </tr>
 </thead>
 <tbody>
@@ -524,45 +534,106 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 </tr>
 </table>
 <p>Examples:</p>
-
-<figure><!-- TODO -->
-<pre>
-81
-00 03
-00 00 00 54
+<table>
+<thead>
+<tr>
+  <th>Bytes</th>
+  <th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <th colspan="2">unencoded portion</th>
+</tr>
+<tr>
+  <td><span class="hex">81</span></td>
+  <td>bundled document, version 1</td>
+</tr>
+<tr>
+  <td><span class="hex">00 03</span></td>
+  <td>3 files</td>
+</tr>
+<tr>
+  <td><pre class="hex">00 00 00 54
 00 00 0e 02
-00 01 cf 52
-
-00 0d ad
+00 01 cf 52</pre>
+  </td>
+  <td>file offsets: 84, 3586, 118610</td>
+</tr>
+<tr>
+  <td></td>
+</tr>
+<tr>
+  <th colspan="2">encoded portion (as passed to encoder)</th>
+</tr>
+<tr>
+  <td><pre class="hex">00 0d ad
 01 c1 50
-00 1e c5
-00
+00 1e c5</pre>
+  </td>
+  <td>file sizes: 3501, 115024, 7877</td>
+</tr>
+<tr>
+  <td><pre class="hex">00
 01
-01
-64 69 63 74 30 30 30 32 2e 69 66 66 00
+01</pre>
+  </td>
+  <td>flag bytes: included file, <var>hasname</var> = 0, <var>hastitle</var> = 0; page file, <var>hasname</var> = 0, <var>hastitle</var> = 0; page file, <var>hasname</var> = 0, <var>hastitle</var> = 0</td>
+</tr>
+<tr>
+  <td><pre class="hex">64 69 63 74 30 30 30 32 2e 69 66 66 00
 70 30 30 30 31 2e 64 6a 76 75 00
-70 30 30 30 32 2e 64 6a 76 75 00
-</pre>
-<figcaption></figcaption>
-</figure>
-
-<figure><!-- TODO -->
-<pre>
-01
-00 03
-
-00 0d ad
+70 30 30 30 32 2e 64 6a 76 75 00</pre>
+  </td>
+  <td>file IDs: <span class="filename">dict0002.iff</span>, <span class="filename">p0001.djvu</span>, <span class="filename">p0002.djvu</span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+  <th>Bytes</th>
+  <th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <th colspan="2">unencoded portion</th>
+</tr>
+<tr>
+  <td><span class="hex">01</span></td>
+  <td>indirect document, version 1</td>
+</tr>
+<tr>
+  <td><span class="hex">00 03</span></td>
+  <td>3 files</td>
+</tr>
+<tr>
+  <th colspan="2">encoded portion (as passed to encoder)</th>
+</tr>
+<tr>
+  <td><pre class="hex">00 0d ad
 01 c1 50
-00 1e c5
-00
+00 1e c5</pre>
+  </td>
+  <td>file sizes: 3501, 115024, 7877</td>
+</tr>
+<tr>
+  <td><pre>00
 01
-01
-64 69 63 74 30 30 30 32 2e 69 66 66 00
+01</pre>
+  </td>
+  <td>flag bytes: included file, <var>hasname</var> = 0, <var>hastitle</var> = 0; page file, <var>hasname</var> = 0, <var>hastitle</var> = 0; page file, <var>hasname</var> = 0, <var>hastitle</var> = 0</td>
+</tr>
+<tr>
+  <td><pre>64 69 63 74 30 30 30 32 2e 69 66 66 00
 70 30 30 30 31 2e 64 6a 76 75 00
-70 30 30 30 32 2e 64 6a 76 75 00
-</pre>
-</figure>
-<figcaption></figcaption>
+70 30 30 30 32 2e 64 6a 76 75 00</pre>
+  </td>
+  <td>file IDs: <span class="filename">dict0002.iff</span>, <span class="filename">p0001.djvu</span>, <span class="filename">p0002.djvu</span></td>
+</tr>
+</tbody>
+</table>
 </section><!-- 8.3.2.2 -->
 </section><!-- 8.3.2 -->
 
@@ -600,11 +671,148 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
   <td>The URL text. This may (and typically does) use the syntax described for the URLs in the <span class="ck">ANTa</span> chunk (and similarly, is not URL-encoded).</td>
 </tr>
 </table>
-<p>Example (as passed to the BZZ codec):</p>
+<p>Example (as passed to the BZZ encoder):</p>
 <p>Consider a small document outline as follows:</p>
-<!-- TODO -->
-<p>There is no hyperlink associated with the single root entry "Table of Contents". At a binary level, the chunk looks like this:
-<table><!-- TODO -->
+<ol style="list-style-type:none">
+<li>
+  Table of Contents
+  <ol style="list-style-type:none">
+  <li>Introduction</li>
+  <li>
+    Datasheet
+    <ol style="list-style-type:none">
+    <li>For More Info (Online)</li>
+    </ol>
+  </li>
+  </ol>
+</li>
+</ol>
+<p>There is no hyperlink associated with the single root entry "Table of Contents". At a binary level, the chunk looks like this [before encoding]:
+<table>
+<thead>
+<tr>
+  <th>Offset</th>
+  <th>Bytes</th>
+  <th>Interpretation</th>
+</tr>
+</thead> 
+<tbody>
+<tr>
+  <td><span class="hex">0012F06C</span></td>
+  <td><span class="hex">00 04</span></td>
+  <td>4 bookmarks</td>
+</tr>
+<tr>
+  <th colspan="3">first record</th>
+</tr>
+<tr>
+  <td><span class="hex">0012F06E</span></td>
+  <td><span class="hex">02</span></td>
+  <td>2 children</td>
+</tr>
+<tr>
+  <td><span class="hex">0012F06F</span></td>
+  <td><span class="hex">00 00 11</span></td>
+  <td>17 bytes of description text</td>
+</tr>
+<tr>
+  <td><span class="hex">0012F072</span></td>
+  <td><pre class="hex">54 61 62 6c 65 20 6f 66 20 43 6f 6e 74 65 6e 74
+73</pre></td>
+  <td>description text: "Table of Contents"</td>
+</tr>
+<tr>
+  <td><span class="hex">0012F083</span></td>
+  <td><span class="hex">00 00 00</span></td>
+  <td>0 bytes of URL text</td>
+</tr>
+<tr>
+  <th colspan="3">second record</th>
+</tr>
+<tr>
+  <td><span class="hex">0012F086</span></td>
+  <td><span class="hex">00</span></td>
+  <td>0 children</td>
+</tr>
+<tr>
+  <td><span class="hex">0012F087</span></td>
+  <td><span class="hex">00 00 0c</span></td>
+  <td>12 bytes of description text</td>
+</tr>
+<tr>
+  <td><span class="hex">0012F08A</span></td>
+  <td><pre class="hex">49 9e 74 72 6f 64 75 63 74 69 6f 6e</pre></td>
+  <td>description text: "Introduction"</td>
+</tr>
+<tr>
+  <td><span class="hex">0012F096</span></td>
+  <td><span class="hex">00 00 0b</span></td>
+  <td>11 bytes of URL text</td>
+</tr>
+<tr>
+  <td><span class="hex">0012F099</span></td>
+  <td><span class="hex">23 70 30 30 30 31 2e 64 6a 76 75</span></td>
+  <td>URL text: "#p0001.djvu"</td>
+</tr>
+<tr>
+  <th colspan="3">third record</th>
+</tr>
+<tr>
+  <td><span class="hex">0012F0A4</span></td>
+  <td><span class="hex">01</span></td>
+  <td>1 child</td>
+</tr>
+<tr>
+  <td><span class="hex">0012F0A5</span></td>
+  <td><span class="hex">00 00 09</span></td>
+  <td>9 bytes of description text</td>
+</tr>
+<tr>
+  <td><span class="hex">0012F0A8</span></td>
+  <td><pre class="hex">44 61 74 61 73 68 65 65 74</pre></td>
+  <td>description text: "Datasheet"</td>
+</tr>
+<tr>
+  <td><span class="hex">0012F0B1</span></td>
+  <td><span class="hex">00 00 0b</span></td>
+  <td>11 bytes of URL text</td>
+</tr>
+<tr>
+  <td><span class="hex">0012F0B4</span></td>
+  <td><span class="hex">23 70 30 30 30 32 2e 64 6a 76 75</span></td>
+  <td>URL text: "#p0002.djvu"</td>
+</tr>
+<tr>
+  <th colspan="3">fourth record</th>
+</tr>
+<tr>
+  <td><span class="hex">0012F0BF</span></td>
+  <td><span class="hex">00</span></td>
+  <td>0 children</td>
+</tr>
+<tr>
+  <td><span class="hex">0012F0C0</span></td>
+  <td><span class="hex">00 00 16</span></td>
+  <td>22 bytes of description text</td>
+</tr>
+<tr>
+  <td><span class="hex">0012F0C3</span></td>
+  <td><pre class="hex">46 6f 72 20 4d 64 72 65 20 49 6e 66 6f 20 28 4f
+6e 6c 69 6e 65 29</pre></td>
+  <td>description text: "For More Info (Online)"</td>
+</tr>
+<tr>
+  <td><span class="hex">0012F0D9</span></td>
+  <td><span class="hex">00 00 19</span></td>
+  <td>25 bytes of URL text</td>
+</tr>
+<tr>
+  <td><span class="hex">0012F0DC</span></td>
+  <td><pre class="hex">68 74 74 70 3a 2f 2f 77 77 77 2e 6c 69 7a 61 72
+64 74 65 63 68 2e 63 6f 6d</pre></td>
+  <td>URL text: "http://www.lizardtech.com"</td>
+</tr>
+</tbody>
 </table>
 </section><!-- 8.3.3 -->
 
@@ -652,19 +860,405 @@ This is an unofficial transcription, with minor orthographic and stylistic chang
 </section><!-- 8.3.4.2 -->
 
 </section><!-- 8.3.4 -->
+
+<section id="8.3.5">
+<h4><a href="#8.3.5">8.3.5</a> Text chunk: <span class="ck">TXTa</span>, <span class="ck">TXTz</span></h4>
+<p>Text is contained in <span class="ck">TXTa</span> or <span class="ck">TXTz</span> chunks. The <span class="ck">TXTa</span> chunks contain the text unencoded. The <span class="ck">TXTz</span> chunks contain the same information compressed with the BZZ encoder (see <a class="filename" href="https://sourceforge.net/p/djvu/djvulibre-git/ci/master/tree/libdjvu/BSByteStream.h">BSByteStream.h</a>).</p>
+<p>The use of the <span class="ck">TXTa</span> chunk is discouraged.</p>
+<p>The chunk begins with the UTF-8-encoded text of the page:</p>
+<table class="hoist">
+<tr>
+  <td><span class="ty" title="24-bit unsigned integer, most significant byte first">BE24</span></td>
+  <td>size of the text string in bytes</td>
+</tr>
+<tr>
+  <td><span class="ty" title="UTF-8 string">STR</span></td>
+  <td>UTF-8-encoded string</td>
+</tr>
+<tr>
+  <td><span class="ty" title="single byte">BYTE</span></td>
+  <td>version (currently 1)</td>
+</tr>
+</table>
+</section><!-- 8.3.5 -->
+
 </section><!-- 8.3 -->
 </section><!-- 8 -->
 
 <section id="9">
-<h2><a href="#9">9</a> DjVu in the raw (binary and IFF-level dumps)</h2>
+<h2><a href="#9">9</a> DjVu in the raw (binary and IFF-level dumps) <small>[<a href="#">top</a>]</small></h2>
 </section><!-- 9 -->
 
 <section id="10">
-<h2><a href="#10">10</a> Appendix 1: IW44 coding</h2>
+<h2><a href="#10">10</a> Appendix 1: IW44 coding <small>[<a href="#">top</a>]</small></h2>
+<p>This section describes the coding of chunks of type <span class="ck">BG44</span>, <span class="ck">FG44</span>, <span class="ck">PM44</span>, <span class="ck">BM44</span>, and <span class="ck">TH44</span>. Chunks of type <span class="ck">BG44</span>, <span class="ck">FG44</span>, and <span class="ck">TH44</span> may be color or grayscale chunks. Chunks of type <span class="ck">PM44</span> are color chunks. Chunks of type <span class="ck">BM44</span> are grayscale chunks. All of these color and grayscale chunk types have the same structure. The chunk consists of a chunk header followed by arithmetically-coded wavelet coefficient updates. The coefficients are organized in a hierarchical fashion.</p>
+
+<section id="10.1">
+<h3><a href="#10.1">10.1</a> Definitions</h3>
+<dl>
+<dt>Color component<dt>
+<dd>Compound DjVu images and photo DjVu images contain color or grayscale image data. Color IW44 images contain color image data. Grayscale IW44 images contain grayscale image data. Color image data is coded using three color components, called <var>Y</var>, <var>Cb</var>, and <var>Cr</var>. These correspond to the usual YCbCr color space, adjusted to facilitate transformation to the RGB color space. Grayscale image data is coded using one color component, called <var>Y</var>. This corresponds to the grayscale intensity of the image.</dd>
+
+<dt>Color layer</dt>
+<dd>
+A color layer is any of:
+<ul>
+<li>The foreground layer of a compound DjVu image, coded in one <span class="ck">FG44</span> chunk</li>
+<li>The background layer of compound DjVu image, coded in one or more <span class="ck">BG44</span> chunks</li>
+<li>The only layer of a photo DjVu image, coded in one or more <span class="ck">BG44</span> chunks</li>
+<li>The only layer of a color IW44 image, coded in one or more <span class="ck">PM44</span> chunks</li>
+<li>The only layer of a grayscale IW44 image, coded in one or more <span class="ck">BM44</span> chunks</li>
+</ul>
+</dd>
+
+<dt>Color chunk</dt>
+<dd>A color chunk is a chunk of type <span class="ck">BG44</span>, <span class="ck">FG44</span>, <span class="ck">PM44</span>, or <span class="ck">BM44</span>. A color chunk contains wavelet coefficient update information for one or three color components.</dd>
+
+<dt>Block</dt>
+<dd>A rectangular array of pixels of size 32 × 32 or less. The blocks are numbered starting in the lower left corner of the image. All blocks are 32 × 32 except possible those along the right edge or top edge; those blocks may be smaller if the image dimensions are not divisible by 32.</dd>
+
+<dt>Block count</dt>
+<dd>The number of blocks in the image, denoted by <var>NB</var>.</dd>
+
+<dt>Wavelet block</dt>
+<dd>The set of coefficients associated with one block of the image, in one color component. There are 1024 wavelet coefficients in a wavelet block, numbered 0 through 1023. The coefficients in a wavelet block have effects on the reconstruction of other blocks in the image, but for coding purposes they are considered to be localized within the block in which they are coded.</dd>
+
+<dt>Bucket</dt>
+<dd>A particular set of 16 wavelet coefficients within a wavelet block. A wavelet block consists of 64 buckets, numbered 0 through 63. Table 2 gives the correspondence between coefficients and buckets.</dd>
+
+<dt>Band</dt>
+<dd>A subset of wavelet coefficients for a given color component. There are 10 bands. The correspondence among band numbers, coefficient indices, and bucket coefficients is given by Table 2.</dd>
+
+<dt>Cycle</dt>
+<dd>Data for one color component consisting of coefficient updates for all coefficients, that is, for all 10 bands, starting with band 0. Within one band, only some coefficients are updated, but within a cycle, all coefficients are updated. The last cycle of a color component may have fewer than 10 bands.</dd>
+
+<dt>Color band number</dt>
+<dd>The current band number for a color component. Each color component’s color band number starts at 0, and increases by 1 at the end of selected slices until it reaches 9; then it is reset to 0.</dd>
+
+<dt>Color band</dt>
+<dd>A collection of update information for a subset of the coefficients of one color component of the image, consisting of updates of all the coefficients in the image whose indices within their respective blocks are those corresponding to the current color band’s color band number.</dd>
+
+<dt>Slice</dt>
+<dd>A slice is the highest-level subdivision of a color chunk. A slice contains data for one color band for each of the color components in a color layer, that is, for three color components for a color image, or for one color component for a grayscale image.</dd>
+
+<dt>Block band</dt>
+<dd>A collection of update information for a subset of the coefficients of one color component of a wavelet block, consisting of updates of the coefficients in the block whose indices are those corresponding to a given band.</dd>
+
+<dt>Chrominance delay counter</dt>
+<dd>An integer counter that indicates how many slices in a color layer contain a color band only for the <var>Y</var> color component, and not for the <var>Cb</var> and <var>Cr</var> color components. The chrominance delay counter is initially set to the value specified in the <span class="ck">INFO</span> chunk for the color layer, and decremented by 1 after each slice in the color layer until it reaches 0. See §<a href="#10.4.1.1">10.4.1.1</a>.</dd>
+
+<dt>Step size table</dt>
+<dd>A table that indicates the precision to which each coefficient in a color component is currently stored. There are three such tables for a given color layer, one for each color component. Each such table has 16 entries. Each entry specifies the current step size for 1, 4, 16, 64, or 256 different coefficient indices, according to Table 3.</dd>
+
+</dl>
+</section><!-- 10.1 -->
+
+<section id="10.2">
+<h3><a href="#10.2">10.2</a> Color chunks within a DjVu file</h3>
+<p>There may be more than one <span class="ck">BG44</span>, <span class="ck">PM44</span>, or <span class="ck">BM44</span> chunk in a DjVu file. If there is more than one such color chunk, the coefficient updating is continuous across the chunks, and the data is taken from the chunks in the order in which they appear in the file. Nothing is reinitialized at the beginning of chunks after the first color chunk of these types, except for the low-level arithmetic coder. The probability estimates for the arithmetic coder are not reinitialized.</p>
+<p>In a compound DjVu image file, in which both an <span class="ck">FG44</span> chunk and one or more <span class="ck">BG44</span> chunks appear in the same file, the coding of the foreground layer, using the <span class="ck">FG44</span> chunk, is independent of the coding of the background layer, using the <span class="ck">BG44</span> chunks.</p>
+<p>Each color layer is coded using a Dubuc–Deslauriers–Lemire (4, 4) interpolative wavelet transform. Each layer of the image is transformed into a set of wavelet coefficients, one wavelet coefficient for each pixel in the original image. This transform is especially effective for coding images at high compression ratios.</p>
+<p>The value of each coefficient is coded in a distributed fashion, through a number of cycles. Within one cycle, each coefficient is updated once (that is, in only one of the 10 bands), and receives approximately one additional bit of information. Specifically, from cycle to cycle the absolute value of a coefficient is first narrowed down by eliminating possible values for the most significant non-zero bit until the correct most significant non-zero bit is found. The sign is coded in the same cycle in which the most significant non-zero bit is found. Then in each subsequent cycle, one additional bit of the value is coded.</p>
+</section><!-- 10.2 -->
+
+<section id="10.3">
+<h3><a href="#10.3">10.3</a> Color chunk data headers</h3>
+<p>A color chunk begins with a data header consisting of 2 or 9 octets, as follows:</p>
+<table class="hoist">
+<tr>
+  <td><span class="ty" title="single byte">BYTE</span></td>
+  <td>Serial number</td>
+  <td>The serial number of the first chunk of a given chunk type is 0. Successive chunks are assigned consecutive serial numbers.</td>
+</tr>
+<tr>
+  <td><span class="ty" title="single byte">BYTE</span></td>
+  <td>Number of slices</td>
+  <td>The number of slices coded in the chunk.</td>
+</tr>
+<tr>
+  <td><span class="ty" title="single byte">BYTE</span></td>
+  <td>Major version number and color type</td>
+  <td>One octet containing two values, present only if the serial number is 0. The least significant seven bits designate the major version number of the standard being implemented by the decoder. For this version of the standard, the major version number is 1. The most significant bit is the color type bit. The color type bit is 0 if the chunk describes three color components. The color type bit is 1 if the chunk describes one color component.</td>
+</tr>
+<tr>
+  <td><span class="ty" title="single byte">BYTE</span></td>
+  <td>Minor version number</td>
+  <td>A one-octet unsigned integer, present only if the serial number is 0. This octet designates the minor version number of the standard being implemented by the decoder. For this version of the standard, the minor version number is 0.</td>
+</tr>
+<tr>
+  <td><span class="ty" title="16-bit unsigned integer, most significant byte first">BE16</span></td>
+  <td>Image width</td>
+  <td>A two-octet unsigned integer, most significant octet first, present only if the serial number is 0. This field indicates the number of pixels in each row of the image described by the current chunk. The image width will be less than the width of the original image if the chunk describes a layer coded at lower resolution than the original image. For a <span class="ck">BG44</span> or <span class="ck">FG44</span> chunk, if <var>W</var> is the width of the original image specified in the <span class="ck">INFO</span> chunk, and <var>w</var> is the width of the image described by the current chunk, then the allowable values of <var>w</var> are
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mo stretchy="false" form="prefix">⌈</mo>
+    <mi>W</mi>
+    <mi>/</mi>
+    <mn>1</mn>
+    <mo stretchy="false" form="postfix">⌉</mo>
+  </mrow>
+</math>,
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mo stretchy="false" form="prefix">⌈</mo>
+    <mi>W</mi>
+    <mi>/</mi>
+    <mn>2</mn>
+    <mo stretchy="false" form="postfix">⌉</mo>
+  </mrow>
+</math>,
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mo stretchy="false" form="prefix">⌈</mo>
+    <mi>W</mi>
+    <mi>/</mi>
+    <mn>3</mn>
+    <mo stretchy="false" form="postfix">⌉</mo>
+  </mrow>
+</math>,
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mo stretchy="false" form="prefix">⌈</mo>
+    <mi>W</mi>
+    <mi>/</mi>
+    <mn>4</mn>
+    <mo stretchy="false" form="postfix">⌉</mo>
+  </mrow>
+</math>,
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mo stretchy="false" form="prefix">⌈</mo>
+    <mi>W</mi>
+    <mi>/</mi>
+    <mn>5</mn>
+    <mo stretchy="false" form="postfix">⌉</mo>
+  </mrow>
+</math>,
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mo stretchy="false" form="prefix">⌈</mo>
+    <mi>W</mi>
+    <mi>/</mi>
+    <mn>6</mn>
+    <mo stretchy="false" form="postfix">⌉</mo>
+  </mrow>
+</math>,
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mo stretchy="false" form="prefix">⌈</mo>
+    <mi>W</mi>
+    <mi>/</mi>
+    <mn>7</mn>
+    <mo stretchy="false" form="postfix">⌉</mo>
+  </mrow>
+</math>,
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mo stretchy="false" form="prefix">⌈</mo>
+    <mi>W</mi>
+    <mi>/</mi>
+    <mn>8</mn>
+    <mo stretchy="false" form="postfix">⌉</mo>
+  </mrow>
+</math>,
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mo stretchy="false" form="prefix">⌈</mo>
+    <mi>W</mi>
+    <mi>/</mi>
+    <mn>9</mn>
+    <mo stretchy="false" form="postfix">⌉</mo>
+  </mrow>
+</math>,
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mo stretchy="false" form="prefix">⌈</mo>
+    <mi>W</mi>
+    <mi>/</mi>
+    <mn>10</mn>
+    <mo stretchy="false" form="postfix">⌉</mo>
+  </mrow>
+</math>,
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mo stretchy="false" form="prefix">⌈</mo>
+    <mi>W</mi>
+    <mi>/</mi>
+    <mn>11</mn>
+    <mo stretchy="false" form="postfix">⌉</mo>
+  </mrow>
+</math>, and
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mo stretchy="false" form="prefix">⌈</mo>
+    <mi>W</mi>
+    <mi>/</mi>
+    <mn>12</mn>
+    <mo stretchy="false" form="postfix">⌉</mo>
+  </mrow>
+</math>.
+  For a <span class="ck">BM44</span> or <span class="ck">PM44</span> chunk, there are no restrictions on the image width.</td>
+</tr>
+<tr>
+  <td><span class="ty" title="16-bit unsigned integer, most significant byte first">BE16</span></td>
+  <td>Image height</td>
+  <td>A two-octet unsigned integer, most significant octet first, present only if the serial number is 0. This field indicates the number of pixels in each column of the image described by the current chunk. The image height will be less than the height of the original image if the chunk describes a layer coded at lower resolution than the original image. For a <span class="ck">BG44</span> or <span class="ck">FG44</span> chunk, if <var>H</var> is the height of the original image specified in the <span class="ck">INFO</span> chunk, and <var>h</var> is the height of the image described by the current chunk, then the allowable values of <var>h</var> are
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mo stretchy="false" form="prefix">⌈</mo>
+    <mi>H</mi>
+    <mi>/</mi>
+    <mn>1</mn>
+    <mo stretchy="false" form="postfix">⌉</mo>
+  </mrow>
+</math>,
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mo stretchy="false" form="prefix">⌈</mo>
+    <mi>H</mi>
+    <mi>/</mi>
+    <mn>2</mn>
+    <mo stretchy="false" form="postfix">⌉</mo>
+  </mrow>
+</math>,
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mo stretchy="false" form="prefix">⌈</mo>
+    <mi>H</mi>
+    <mi>/</mi>
+    <mn>3</mn>
+    <mo stretchy="false" form="postfix">⌉</mo>
+  </mrow>
+</math>,
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mo stretchy="false" form="prefix">⌈</mo>
+    <mi>H</mi>
+    <mi>/</mi>
+    <mn>4</mn>
+    <mo stretchy="false" form="postfix">⌉</mo>
+  </mrow>
+</math>,
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mo stretchy="false" form="prefix">⌈</mo>
+    <mi>H</mi>
+    <mi>/</mi>
+    <mn>5</mn>
+    <mo stretchy="false" form="postfix">⌉</mo>
+  </mrow>
+</math>,
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mo stretchy="false" form="prefix">⌈</mo>
+    <mi>H</mi>
+    <mi>/</mi>
+    <mn>6</mn>
+    <mo stretchy="false" form="postfix">⌉</mo>
+  </mrow>
+</math>,
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mo stretchy="false" form="prefix">⌈</mo>
+    <mi>H</mi>
+    <mi>/</mi>
+    <mn>7</mn>
+    <mo stretchy="false" form="postfix">⌉</mo>
+  </mrow>
+</math>,
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mo stretchy="false" form="prefix">⌈</mo>
+    <mi>H</mi>
+    <mi>/</mi>
+    <mn>8</mn>
+    <mo stretchy="false" form="postfix">⌉</mo>
+  </mrow>
+</math>,
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mo stretchy="false" form="prefix">⌈</mo>
+    <mi>H</mi>
+    <mi>/</mi>
+    <mn>9</mn>
+    <mo stretchy="false" form="postfix">⌉</mo>
+  </mrow>
+</math>,
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mo stretchy="false" form="prefix">⌈</mo>
+    <mi>H</mi>
+    <mi>/</mi>
+    <mn>10</mn>
+    <mo stretchy="false" form="postfix">⌉</mo>
+  </mrow>
+</math>,
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mo stretchy="false" form="prefix">⌈</mo>
+    <mi>H</mi>
+    <mi>/</mi>
+    <mn>11</mn>
+    <mo stretchy="false" form="postfix">⌉</mo>
+  </mrow>
+</math>, and
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mo stretchy="false" form="prefix">⌈</mo>
+    <mi>H</mi>
+    <mi>/</mi>
+    <mn>12</mn>
+    <mo stretchy="false" form="postfix">⌉</mo>
+  </mrow>
+</math>.
+  For a <span class="ck">BM44</span> or <span class="ck">PM44</span> chunk, there are no restrictions on the image height.</td>
+</tr>
+<tr>
+  <td><span class="ty" title="single byte">BYTE</span></td>
+  <td>Initial value of chrominance delay counter</td>
+  <td>A one-octet unsigned integer, present only if the serial number is 0. Only the least significant seven bits are used. The most significant bit is ignored, but should be set to 1 by an encoder. This field specifies the initial value of the chrominance delay counter, used as described below.</td>
+</tr>
+</table>
+
+</section><!-- 10.3 -->
+
+<section id="10.4">
+<h3><a href="#10.4">10.4</a> Color chunk data</h3>
+
+<section id="10.4.1">
+<h4><a href="#10.4.1">10.4.1</a> Hierarchical structure of a coded color layer</h4>
+<p>The data coded in a color chunk consists of information needed to reconstruct wavelet coefficients. There are one or three color components; each color component has its own set of wavelet coefficients. Within a color component, there are 1024 wavelet coefficients for each 32 × 32 block of the image.</p>
+<p>Within one layer (background or foreground for DjVu image, or the only layer for an IW44 image), coding is divided into a series of slices. All the slices may be coded in one chunk, or they may be separated into a number of chunks. The only difference it makes whether the slices are coded in one chunk or in several chunks is in the order of progressive rendering; the final reconstructed image will be the same. The number of slices in each chunk is specified in the color chunk data header. One slice contains refinement data for one color band for each color component. Within a color component, all coefficients in a slice are in the same band.</p>
+<p>A color chunk describes the full image at the spatial resolution implied by the image width and image height fields in the data header of the first chunk of the same type as the current color chunk.</p>
+<p>The sequence of color components within a slice is: first <var>Y</var>, then <var>Cb</var>, then <var>Cr</var>, although the <var>Cb</var> and <var>Cr</var> components are not present in a slice if the chunk describes grayscale data or if the chrominance delay counter is not equal to 0 at the time the slice is coded.</p>
+<p>A color band is made of up coefficient updates for all blocks in the image, but only for coefficients that are in the currently active band for the color component. Each block’s set of updates within a color band is called a <i>block band</i>. The block bands are coded block by block, first from left to right within the bottom row, then by rows moving up the image, left to right within each row.</p>
+<p>Within a block band, there are 16, 64, or 256 coefficient updates. The coefficients being updated are divided into buckets, each bucket containing 16 coefficients. Thus, a block band contains 1, 4, or 16 buckets. The buckets and coefficients being updated are determined by the color band number according to Table 2.</p>
+
+<section id="10.4.1.1">
+<h5><a href="#10.4.1.1">10.4.1.1</a> Band counting</h5>
+<p>The header of the first color chunk contains an initial value for the chrominance delay counter. It may be 0 or a positive integer.</p>
+<p>At the beginning of the first color chunk, the color band number for each of the three color components is set to 0.</p>
+<p>At the beginning of each slice, the chrominance delay counter is tested. If the chrominance delay counter is 0, and if the slice describes color image data, then all three color components are present. If the chrominance delay counter is greater than 0, or if the chunk describes grayscale image data, only the <var>Y</var> color component is present for the slice.</p>
+<p>At the end of a slice, the following actions take place:</p>
+<ul>
+<li>The color band number is increased by 1 for the <var>Y</var> component. If the new color band number exceeds 9, it is set to 0.</li>
+<li>If the chrominance delay counter is 0, the color band numbers for the <var>Cb</var> and <var>Cr</var> components are increased by 1. If the new color band numbers exceed 9, they are set to 0. (Note: the color band numbers for the <var>Cb</var> and <var>Cr</var> components are always equal to each other.)</li>
+<li>If the chrominance delay counter is greater than 0, it is decreased by 1.</li>
+</ul>
+<p>A color chunk ends when the number of slices specified in the color chunk header have been coded. At the beginning of each color chunk after the first for a given color layer, the chrominance delay counter and color band numbers retain the values they had at the end of the previous color chunk.</p>
+</section><!-- 10.4.1.1 -->
+</section><!-- 10.4.1 -->
+
+<section id="10.4.2">
+<h4><a href="#10.4.2">10.4.2</a> Quantization of coefficients</h4>
+<p>At each point during the decoding process, each wavelet coefficient has been determined to a certain precision. The current value <var>a</var> of the coefficient is stored, and a current step size <var>S</var> is associated with the coefficient. The current step size for each coefficient is governed by a step size table. The index of the entry in the step size table that contains the step size for a given coefficient that contains the step size for a given coefficient is given in Table 3.</p>
+
+</section><!-- 10.4.2 -->
+</section><!-- 10.4 -->
 </section><!-- 10 -->
 
 <section id="11">
-<h2><a href="#11">11</a> Appendix 2: JB2 coding</h2>
+<h2><a href="#11">11</a> Appendix 2: JB2 coding <small>[<a href="#">top</a>]</small></h2>
 
 <section id="11.1">
 <h3><a href="#11.1">11.1</a> General considerations</h3>
@@ -721,9 +1315,9 @@ different combinations of values that the pixels in the refinement coding templa
 <caption>Table 6: record types and fields coded for each record type</caption>
 <thead>
 <tr>
-  <td>Record type coded value</td>
-  <td>Record type</td>
-  <td>Fields coded</td>
+  <th>Record type coded value</th>
+  <th>Record type</th>
+  <th>Fields coded</th>
 </tr>
 </thead>
 <tbody>
@@ -874,8 +1468,8 @@ different combinations of values that the pixels in the refinement coding templa
 <caption>Table 7: multivalued integer contexts for arithmetic coding</caption>
 <thead>
 <tr>
-  <td>Context name</td>
-  <td>Integer data coded using this context</td>
+  <th>Context name</th>
+  <th>Integer data coded using this context</th>
 </tr>
 </thead>
 <tbody>
@@ -1229,7 +1823,7 @@ then Phase 3 is skipped. Otherwise, since the size of the range is a power of 2,
 </section><!-- 11.4 -->
 
 <section id="11.5">
-<h3>11.5 Fields</h3>
+<h3><a href="#11.5">11.5</a> Fields</h3>
 <p>The following fields are coded in records of the types specified in Table 6 and in §<a href="#11.4">11.4</a>.</p>
 
 <section id="11.5.1">
@@ -1308,7 +1902,7 @@ then Phase 3 is skipped. Otherwise, since the size of the range is a power of 2,
 </section><!-- 11 -->
 
 <section id="12">
-<h2><a href="#12">12</a> Appendix 3: Z&prime; coding</h2>
+<h2><a href="#12">12</a> Appendix 3: Z&prime; coding <small>[<a href="#">top</a>]</small></h2>
 <p>The Z&prime;-Coder is an approximate binary arithmetic coder. Decoding proceeds as follows.<sup>[<a id="note-12-1" href="./spec-comments.html#12-1">1</a>]</sup></p>
 <p>See also files <a class="filename" href="https://sourceforge.net/p/djvu/djvulibre-git/ci/master/tree/libdjvu/ZPCodec.h">ZPCodec.h</a> and <a class="filename" href="https://sourceforge.net/p/djvu/djvulibre-git/ci/master/tree/libdjvu/ZPCodec.cpp">ZPCodec.cpp</a> in DjVuLibre.</p>
 
@@ -1586,7 +2180,7 @@ may be accomplished by left shifts, leaving the least significant bit equal to 0
 </section><!-- 12 -->
 
 <section id="13">
-<h2><a href="#13">13</a> Appendix 4: BZZ coding</h2>
+<h2><a href="#13">13</a> Appendix 4: BZZ coding <small>[<a href="#">top</a>]</small></h2>
 <p>Numerous streams in the DjVu file format are compressed using the general-purpose compressor described here called “BZZ”. BZZ transforms the input data using the well-documented Burrows–Wheeler transform. However, the traditional “Move To Front” permutation table is augmented with a frequency estimation provided by the Z&prime;-Coder.</p>
 <p>See also file <a class="filename" href="https://sourceforge.net/p/djvu/djvulibre-git/ci/master/tree/libdjvu/BSByteStream.cpp">BSByteStream.cpp</a>.</p>
 
